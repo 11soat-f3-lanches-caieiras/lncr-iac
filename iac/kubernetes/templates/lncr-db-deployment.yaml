@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.postgres.containerName }}-deployment
+  
+  labels:
+    app: {{ .Values.postgres.containerName }}
+spec:
+  replicas: 1  # PostgreSQL deve ter apenas 1 réplica devido ao volume persistente
+  strategy:
+    type: Recreate  # Garante que apenas um pod existe por vez
+  selector:
+    matchLabels:
+      app: {{ .Values.postgres.containerName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.postgres.containerName }}
+    spec:
+      containers:
+        - name: {{ .Values.postgres.containerName }}
+          image: postgres:15.7
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.name }}-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.name }}-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.app.name }}-config
+                  key: POSTGRES_DB
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_INITDB_ARGS
+              value: "--auth-host=md5"
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: {{ .Values.resources.postgres.requests.memory }}
+              cpu: {{ .Values.resources.postgres.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.postgres.limits.memory }}
+              cpu: {{ .Values.resources.postgres.limits.cpu }}
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+                - -d
+                - postgres
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+                - -d
+                - postgres
+            initialDelaySeconds: 60
+            periodSeconds: 15
+      volumes:
+        - name: db-storage
+          hostPath:
+            path: {{ .Values.storage.database.hostPath | replace "C:/" "/run/desktop/mnt/host/c/" | replace "\\" "/" | quote }}
+            type: DirectoryOrCreate
