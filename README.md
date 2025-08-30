@@ -1,118 +1,118 @@
 # LNCR Infrastructure as Code (IaC)
 
-This repository contains Terraform modules for deploying a complete cloud infrastructure solution including VPC, OpenVPN, EKS cluster, and API Gateway on AWS.
+Este repositório contém módulos Terraform para implantação de uma solução completa de infraestrutura em nuvem incluindo VPC, OpenVPN, cluster EKS e API Gateway na AWS.
 
-## 🏗️ Architecture Overview
+## 🏗️ Visão Geral da Arquitetura
 
-The infrastructure is designed with a modular approach, providing:
+A infraestrutura foi projetada com uma abordagem modular, fornecendo:
 
-- **VPC Module**: Complete network infrastructure with public, private, and data subnets
-- **OpenVPN Module**: Secure VPN access with automated certificate management
-- **EKS Module**: Kubernetes cluster with managed node groups
-- **API Gateway Module**: HTTP v2 API Gateway with CORS and throttling
-- **Karpenter Module**: Auto-scaling for Kubernetes workloads
+- **Módulo VPC**: Infraestrutura de rede completa com subnets públicas, privadas e de dados
+- **Módulo OpenVPN**: Acesso VPN seguro com gerenciamento automatizado de certificados
+- **Módulo EKS**: Cluster Kubernetes com grupos de nós gerenciados
+- **Módulo API Gateway**: API Gateway HTTP v2 com CORS e throttling
+- **Módulo Karpenter**: Auto-scaling para cargas de trabalho Kubernetes
 
-## 📁 Project Structure
+## 📁 Estrutura do Projeto
 
 ```
 lncr-iac/
-├── main.tf                 # Main infrastructure configuration
-├── variables.tf            # Root-level variables
-├── locals.tf              # Local values and computed variables
-├── providers.tf           # AWS provider configuration
-├── prd.tfvars             # Production environment variables
-├── docker-compose.yml     # LocalStack for local testing
-├── run-localstack.sh      # Script to run with LocalStack
-├── test-vpc.sh           # Script to test VPC module only
+├── main.tf                 # Configuração principal da infraestrutura
+├── variables.tf            # Variáveis do nível raiz
+├── locals.tf              # Valores locais e variáveis computadas
+├── providers.tf           # Configuração do provider AWS
+├── prd.tfvars             # Variáveis do ambiente de produção
+├── docker-compose.yml     # LocalStack para testes locais
+├── run-localstack.sh      # Script para executar com LocalStack
+├── test-vpc.sh           # Script para testar apenas o módulo VPC
 └── modules/
-    ├── vpc/              # VPC and networking resources
-    ├── openvpn/          # OpenVPN server and security
-    ├── eks/              # EKS cluster and node groups
-    ├── karpenter/        # Karpenter auto-scaling
+    ├── vpc/              # Recursos de VPC e rede
+    ├── openvpn/          # Servidor OpenVPN e segurança
+    ├── eks/              # Cluster EKS e grupos de nós
+    ├── karpenter/        # Auto-scaling Karpenter
     └── api-gateway/      # API Gateway HTTP v2
 ```
 
-## 🚀 Quick Start
+## 🚀 Início Rápido
 
-### Prerequisites
+### Pré-requisitos
 
 - Terraform >= 1.0
-- Docker and Docker Compose (for LocalStack testing)
-- AWS CLI configured (for AWS deployment)
+- Docker e Docker Compose (para testes LocalStack)
+- AWS CLI configurado (para implantação AWS)
 
-### Local Testing with LocalStack
+### Testes Locais com LocalStack
 
-1. **Start LocalStack and test infrastructure:**
+1. **Iniciar LocalStack e testar infraestrutura:**
    ```bash
    ./run-localstack.sh
    ```
 
-2. **Test VPC module only:**
+2. **Testar apenas o módulo VPC:**
    ```bash
    ./test-vpc.sh
    ```
 
-### AWS Deployment
+### Implantação AWS
 
-1. **Initialize Terraform:**
+1. **Inicializar Terraform:**
    ```bash
    terraform init
    ```
 
-2. **Plan deployment:**
+2. **Planejar implantação:**
    ```bash
    terraform plan -var-file="prd.tfvars"
    ```
 
-3. **Apply infrastructure:**
+3. **Aplicar infraestrutura:**
    ```bash
    terraform apply -var-file="prd.tfvars"
    ```
 
-## 📋 Variables Reference
+## 📋 Referência de Variáveis
 
-### Global Variables
+### Variáveis Globais
 
-| Variable | Type | Description | Required |
-|----------|------|-------------|----------|
-| `prefix_name` | string | Prefix for all resource names | ✅ |
-| `environment_name` | string | Environment name (prd/stg/qa/dev/labs) | ✅ |
+| Variável | Tipo | Descrição | Obrigatório |
+|----------|------|-----------|-------------|
+| `prefix_name` | string | Prefixo para todos os nomes de recursos | ✅ |
+| `environment_name` | string | Nome do ambiente (prd/stg/qa/dev/labs) | ✅ |
 
-### VPC Variables
+### Variáveis VPC
 
-| Variable | Type | Description | Default |
-|----------|------|-------------|---------|
-| `vpc_cidr` | string | CIDR block for VPC | - |
-| `number_of_azs` | number | Number of Availability Zones | - |
-| `enable_ipv6` | bool | Enable IPv6 for VPC | - |
-| `create_public_subnets` | bool | Create public subnets | - |
-| `create_app_subnets` | bool | Create application subnets | - |
-| `create_data_subnets` | bool | Create data subnets | - |
-| `create_nat` | bool | Create NAT Gateway | - |
-| `nat_gateway_high_availability` | bool | Enable HA for NAT Gateway | - |
+| Variável | Tipo | Descrição | Padrão |
+|----------|------|-----------|--------|
+| `vpc_cidr` | string | Bloco CIDR para VPC | - |
+| `number_of_azs` | number | Número de Zonas de Disponibilidade | - |
+| `enable_ipv6` | bool | Habilitar IPv6 para VPC | - |
+| `create_public_subnets` | bool | Criar subnets públicas | - |
+| `create_app_subnets` | bool | Criar subnets de aplicação | - |
+| `create_data_subnets` | bool | Criar subnets de dados | - |
+| `create_nat` | bool | Criar NAT Gateway | - |
+| `nat_gateway_high_availability` | bool | Habilitar HA para NAT Gateway | - |
 
-### OpenVPN Variables
+### Variáveis OpenVPN
 
-| Variable | Type | Description |
-|----------|------|-------------|
-| `openvpn_instance_type` | string | EC2 instance type for OpenVPN |
+| Variável | Tipo | Descrição |
+|----------|------|-----------|
+| `openvpn_instance_type` | string | Tipo de instância EC2 para OpenVPN |
 
-### EKS Variables
+### Variáveis EKS
 
-| Variable | Type | Description |
-|----------|------|-------------|
-| `cluster_version` | string | Kubernetes version |
-| `namespaces` | list(string) | List of namespaces to create |
-| `instance_type_node_eks` | string | Instance type for EKS nodes |
+| Variável | Tipo | Descrição |
+|----------|------|-----------|
+| `cluster_version` | string | Versão do Kubernetes |
+| `namespaces` | list(string) | Lista de namespaces para criar |
+| `instance_type_node_eks` | string | Tipo de instância para nós EKS |
 
-### API Gateway Variables
+### Variáveis API Gateway
 
-| Variable | Type | Description | Default |
-|----------|------|-------------|---------|
-| `api_gateway_cors` | object | CORS configuration | `{}` |
-| `api_gateway_throttle` | object | Throttling settings | `{}` |
+| Variável | Tipo | Descrição | Padrão |
+|----------|------|-----------|--------|
+| `api_gateway_cors` | object | Configuração CORS | `{}` |
+| `api_gateway_throttle` | object | Configurações de throttling | `{}` |
 
-#### API Gateway CORS Configuration
+#### Configuração CORS do API Gateway
 
 ```hcl
 api_gateway_cors = {
@@ -124,7 +124,7 @@ api_gateway_cors = {
 }
 ```
 
-#### API Gateway Throttling Configuration
+#### Configuração de Throttling do API Gateway
 
 ```hcl
 api_gateway_throttle = {
@@ -133,87 +133,87 @@ api_gateway_throttle = {
 }
 ```
 
-## 🏗️ Module Details
+## 🏗️ Detalhes dos Módulos
 
-### VPC Module (`modules/vpc/`)
+### Módulo VPC (`modules/vpc/`)
 
-Creates a complete VPC infrastructure with:
-- Public, private (app), and data subnets across multiple AZs
-- Internet Gateway and NAT Gateways
-- Route tables and security groups
-- Optional IPv6 support
-- VPC Flow Logs (configurable)
+Cria uma infraestrutura VPC completa com:
+- Subnets públicas, privadas (app) e de dados em múltiplas AZs
+- Internet Gateway e NAT Gateways
+- Tabelas de rota e grupos de segurança
+- Suporte opcional IPv6
+- VPC Flow Logs (configurável)
 
-**Key Resources:**
+**Recursos Principais:**
 - `aws_vpc`
 - `aws_subnet` (public, app, data)
 - `aws_internet_gateway`
 - `aws_nat_gateway`
 - `aws_route_table`
 
-### OpenVPN Module (`modules/openvpn/`)
+### Módulo OpenVPN (`modules/openvpn/`)
 
-Deploys a secure OpenVPN server with:
-- EC2 instance with OpenVPN Access Server
-- Security group with ports 8080 (HTTP) and 1194 (UDP)
-- IAM roles and policies for S3 and SSM access
-- Automated key pair generation
-- S3 bucket for certificate storage
-- AWS Secrets Manager for credentials
+Implanta um servidor OpenVPN seguro com:
+- Instância EC2 com OpenVPN Access Server
+- Grupo de segurança com portas 8080 (HTTP) e 1194 (UDP)
+- Roles e políticas IAM para acesso S3 e SSM
+- Geração automatizada de par de chaves
+- Bucket S3 para armazenamento de certificados
+- AWS Secrets Manager para credenciais
 
-**Key Resources:**
+**Recursos Principais:**
 - `aws_instance`
 - `aws_security_group`
 - `aws_iam_role`
 - `aws_s3_bucket`
 - `aws_secretsmanager_secret`
 
-### EKS Module (`modules/eks/`)
+### Módulo EKS (`modules/eks/`)
 
-Creates a production-ready EKS cluster with:
-- EKS cluster with configurable Kubernetes version
-- Managed node groups
-- RBAC configuration
-- Multiple namespace creation
-- Integration with Karpenter for auto-scaling
+Cria um cluster EKS pronto para produção com:
+- Cluster EKS com versão configurável do Kubernetes
+- Grupos de nós gerenciados
+- Configuração RBAC
+- Criação de múltiplos namespaces
+- Integração com Karpenter para auto-scaling
 
-**Key Resources:**
+**Recursos Principais:**
 - `aws_eks_cluster`
 - `aws_eks_node_group`
 - `kubernetes_namespace`
 
-### API Gateway Module (`modules/api-gateway/`)
+### Módulo API Gateway (`modules/api-gateway/`)
 
-Deploys an HTTP v2 API Gateway with:
-- API Gateway with CORS configuration
-- Default stage with auto-deploy
-- Throttling settings
-- CloudWatch logging
-- Execution ARN for Lambda integration
+Implanta um API Gateway HTTP v2 com:
+- API Gateway com configuração CORS
+- Stage padrão com auto-deploy
+- Configurações de throttling
+- Logging CloudWatch
+- ARN de execução para integração Lambda
 
-**Key Resources:**
+**Recursos Principais:**
 - `aws_apigatewayv2_api`
 - `aws_apigatewayv2_stage`
 - `aws_cloudwatch_log_group`
 
-### Karpenter Module (`modules/karpenter/`)
+### Módulo Karpenter (`modules/karpenter/`)
 
-Provides auto-scaling capabilities with:
-- Karpenter controller installation
-- Node pools and node classes
-- Instance family and CPU-based filtering
-- Spot instance support
+Fornece capacidades de auto-scaling com:
+- Instalação do controlador Karpenter
+- Node pools e node classes
+- Filtragem baseada em família de instância e CPU
+- Suporte a instâncias Spot
 
-## 🔧 Configuration Examples
+## 🔧 Exemplos de Configuração
 
-### Production Environment (`prd.tfvars`)
+### Ambiente de Produção (`prd.tfvars`)
 
 ```hcl
-# Global Configuration
+# Configuração Global
 prefix_name      = "lncr"
 environment_name = "prd"
 
-# VPC Configuration
+# Configuração VPC
 vpc_cidr = "10.1.0.0/16"
 number_of_azs = 2
 enable_ipv6 = false
@@ -223,15 +223,15 @@ create_data_subnets = true
 create_nat = true
 nat_gateway_high_availability = false
 
-# OpenVPN Configuration
+# Configuração OpenVPN
 openvpn_instance_type = "t4g.small"
 
-# EKS Configuration
+# Configuração EKS
 cluster_version = "1.33"
 namespaces = ["staging", "monitoring", "argocd"]
 instance_type_node_eks = "t3.medium"
 
-# API Gateway Configuration
+# Configuração API Gateway
 api_gateway_cors = {
   allow_credentials = false
   allow_headers = ["content-type", "x-amz-date", "authorization", "x-api-key"]
@@ -246,86 +246,86 @@ api_gateway_throttle = {
 }
 ```
 
-## 🔒 Security Features
+## 🔒 Recursos de Segurança
 
-- **Network Isolation**: Separate subnets for different tiers
-- **Security Groups**: Restrictive ingress/egress rules
-- **IAM Roles**: Least privilege access
-- **Encryption**: S3 buckets and EBS volumes encrypted
-- **VPN Access**: Secure remote access via OpenVPN
-- **Secrets Management**: AWS Secrets Manager for sensitive data
+- **Isolamento de Rede**: Subnets separadas para diferentes camadas
+- **Grupos de Segurança**: Regras restritivas de ingress/egress
+- **Roles IAM**: Acesso de menor privilégio
+- **Criptografia**: Buckets S3 e volumes EBS criptografados
+- **Acesso VPN**: Acesso remoto seguro via OpenVPN
+- **Gerenciamento de Segredos**: AWS Secrets Manager para dados sensíveis
 
 ## 📊 Outputs
 
-Each module provides relevant outputs for integration:
+Cada módulo fornece outputs relevantes para integração:
 
-### VPC Outputs
-- VPC ID and CIDR
-- Subnet IDs (public, app, data)
-- Route table IDs
-- NAT Gateway IDs
+### Outputs VPC
+- ID e CIDR da VPC
+- IDs das Subnets (public, app, data)
+- IDs das tabelas de rota
+- IDs dos NAT Gateways
 
-### OpenVPN Outputs
-- Instance ARN and IP
-- Security Group ID
-- Credentials (sensitive)
+### Outputs OpenVPN
+- ARN e IP da instância
+- ID do Security Group
+- Credenciais (sensível)
 
-### EKS Outputs
-- Cluster name and endpoint
-- Cluster ARN
-- Node group ARNs
+### Outputs EKS
+- Nome e endpoint do cluster
+- ARN do cluster
+- ARNs dos grupos de nós
 
-### API Gateway Outputs
-- API ID and endpoint
-- Execution ARN
-- Stage ARN
+### Outputs API Gateway
+- ID e endpoint da API
+- ARN de execução
+- ARN do stage
 
-## 🧪 Testing
+## 🧪 Testes
 
-### LocalStack Testing
+### Testes LocalStack
 
-The project includes LocalStack configuration for local testing:
+O projeto inclui configuração LocalStack para testes locais:
 
 ```bash
-# Start LocalStack with required services
+# Iniciar LocalStack com serviços necessários
 docker-compose up -d
 
-# Test infrastructure
+# Testar infraestrutura
 terraform plan -var-file="prd.tfvars"
 ```
 
-### Supported LocalStack Services
+### Serviços LocalStack Suportados
 - EC2, VPC, IAM, STS
 - S3, Secrets Manager
 - API Gateway v2
 - CloudWatch Logs
 
-## 🏷️ Resource Naming Convention
+## 🏷️ Convenção de Nomenclatura de Recursos
 
-All resources follow the naming pattern:
+Todos os recursos seguem o padrão de nomenclatura:
 ```
 {prefix_name}-{environment_name}-{resource_type}
 ```
 
-Example: `lncr-prd-vpc`, `lncr-prd-openvpn-sg`
+Exemplo: `lncr-prd-vpc`, `lncr-prd-openvpn-sg`
 
-## 📝 Best Practices
+## 📝 Melhores Práticas
 
-1. **Modular Design**: Each component is a separate module
-2. **Environment Separation**: Use different tfvars files
-3. **State Management**: Use remote state for production
-4. **Security**: Follow AWS security best practices
-5. **Monitoring**: CloudWatch logging enabled
-6. **Cost Optimization**: Configurable instance types and scaling
+1. **Design Modular**: Cada componente é um módulo separado
+2. **Separação de Ambientes**: Use diferentes arquivos tfvars
+3. **Gerenciamento de Estado**: Use estado remoto para produção
+4. **Segurança**: Siga as melhores práticas de segurança AWS
+5. **Monitoramento**: Logging CloudWatch habilitado
+6. **Otimização de Custos**: Tipos de instância e scaling configuráveis
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-1. Follow the existing module structure
-2. Update documentation for new variables
-3. Test with LocalStack before AWS deployment
-4. Use consistent naming conventions
-5. Add appropriate tags to all resources
+1. Siga a estrutura de módulos existente
+2. Atualize a documentação para novas variáveis
+3. Teste com LocalStack antes da implantação AWS
+4. Use convenções de nomenclatura consistentes
+5. Adicione tags apropriadas a todos os recursos
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the MIT License.
+Este projeto está licenciado sob a Licença MIT.
