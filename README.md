@@ -10,7 +10,6 @@ A infraestrutura foi projetada com uma abordagem modular, fornecendo:
 - **Módulo OpenVPN**: Acesso VPN seguro com gerenciamento automatizado de certificados
 - **Módulo EKS**: Cluster Kubernetes com grupos de nós gerenciados
 - **Módulo API Gateway**: API Gateway HTTP v2 com CORS e throttling
-- **Módulo Karpenter**: Auto-scaling para cargas de trabalho Kubernetes
 
 ## 📁 Estrutura do Projeto
 
@@ -23,12 +22,10 @@ lncr-iac/
 ├── prd.tfvars             # Variáveis do ambiente de produção
 ├── docker-compose.yml     # LocalStack para testes locais
 ├── run-localstack.sh      # Script para executar com LocalStack
-├── test-vpc.sh           # Script para testar apenas o módulo VPC
 └── modules/
     ├── vpc/              # Recursos de VPC e rede
     ├── openvpn/          # Servidor OpenVPN e segurança
     ├── eks/              # Cluster EKS e grupos de nós
-    ├── karpenter/        # Auto-scaling Karpenter
     └── api-gateway/      # API Gateway HTTP v2
 ```
 
@@ -45,11 +42,6 @@ lncr-iac/
 1. **Iniciar LocalStack e testar infraestrutura:**
    ```bash
    ./run-localstack.sh
-   ```
-
-2. **Testar apenas o módulo VPC:**
-   ```bash
-   ./test-vpc.sh
    ```
 
 ### Implantação AWS
@@ -196,13 +188,7 @@ Implanta um API Gateway HTTP v2 com:
 - `aws_apigatewayv2_stage`
 - `aws_cloudwatch_log_group`
 
-### Módulo Karpenter (`modules/karpenter/`)
 
-Fornece capacidades de auto-scaling com:
-- Instalação do controlador Karpenter
-- Node pools e node classes
-- Filtragem baseada em família de instância e CPU
-- Suporte a instâncias Spot
 
 ## 🔧 Exemplos de Configuração
 
