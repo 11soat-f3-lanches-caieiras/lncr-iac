@@ -73,12 +73,18 @@ module "lambda" {
   environment_name = local.environment_name
   function_name    = "customer-authorizer"
 
-  api_gateway_execution_arn = module.api_gateway.execution_arn
-
   environment_variables = {
     ENVIRONMENT = local.environment_name
     PREFIX      = local.prefix_name
   }
+}
+
+resource "aws_lambda_permission" "api_gateway_invoke" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = module.lambda.lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${module.api_gateway.execution_arn}/*/*"
 }
 
 module "api_gateway" {
