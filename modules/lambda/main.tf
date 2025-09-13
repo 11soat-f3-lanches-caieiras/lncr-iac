@@ -3,7 +3,7 @@
 #========================================================================================#
 
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.prefix_name}-${var.environment_name}-${var.function_name}"
+  function_name = "${var.prefix_name}-${var.function_name}"
   handler       = var.handler
   runtime       = var.runtime
   role          = aws_iam_role.lambda_execution_role.arn
@@ -13,13 +13,15 @@ resource "aws_lambda_function" "lambda" {
     variables = var.environment_variables
   }
 
-  filename = data.archive_file.lambda_zip.output_path
-
   tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-${var.function_name}"
+    Name        = "${var.prefix_name}-${var.function_name}"
     Environment = var.environment_name
     Owner       = "Fiap"
     CostCenter  = "FinOps"
+  }
+
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
   }
 }
 
@@ -36,7 +38,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 #========================================================================================#
 
 resource "aws_iam_role" "lambda_execution_role" {
-  name = "${var.prefix_name}-${var.environment_name}-lambda-execution-role"
+  name = "${var.prefix_name}-lambda-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -48,7 +50,7 @@ resource "aws_iam_role" "lambda_execution_role" {
   })
 
   tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-lambda-execution-role"
+    Name        = "${var.prefix_name}-lambda-execution-role"
     Environment = var.environment_name
     Owner       = "Fiap"
     CostCenter  = "FinOps"
@@ -56,7 +58,7 @@ resource "aws_iam_role" "lambda_execution_role" {
 }
 
 resource "aws_iam_role_policy" "lambda_policy" {
-  name = "${var.prefix_name}-${var.environment_name}-lambda-policy"
+  name = "${var.prefix_name}-lambda-policy"
   role = aws_iam_role.lambda_execution_role.id
 
   policy = jsonencode({
@@ -75,18 +77,3 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
-#========================================================================================#
-#                                  DATA SOURCES                                          #
-#========================================================================================#
-
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  output_path = "/tmp/${var.prefix_name}-${var.environment_name}-${var.function_name}.zip"
-  
-  source {
-    content = templatefile("${path.module}/templates/lambda_function.py", {
-      environment = var.environment_name
-    })
-    filename = "index.py"
-  }
-}

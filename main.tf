@@ -71,7 +71,7 @@ module "lambda" {
 
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
-  function_name    = "api-handler"
+  function_name    = "customer-authorizer"
 
   api_gateway_execution_arn = module.api_gateway.execution_arn
 
