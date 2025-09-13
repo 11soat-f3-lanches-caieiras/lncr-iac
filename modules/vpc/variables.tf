@@ -16,7 +16,7 @@ variable "environment" {
 variable "eks_cluster_name" {
   description = "Nome do cluster para tagging das subnets privadas"
   type        = string
-  default     = "clouddog-eks-cluster"
+  default     = "fiap-eks-cluster"
 }
 
 variable "vpc_cidr" {

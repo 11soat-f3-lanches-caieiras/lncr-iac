@@ -19,7 +19,7 @@ resource "aws_apigatewayv2_api" "api" {
   tags = {
     Name        = "${var.prefix_name}-${var.environment_name}-api"
     Environment = var.environment_name
-    Owner       = "CloudDog"
+    Owner       = "Fiap"
     CostCenter  = "FinOps"
   }
 }
@@ -37,9 +37,32 @@ resource "aws_apigatewayv2_stage" "default" {
   tags = {
     Name        = "${var.prefix_name}-${var.environment_name}-api-stage"
     Environment = var.environment_name
-    Owner       = "CloudDog"
+    Owner       = "fiap"
     CostCenter  = "FinOps"
   }
+}
+
+#========================================================================================#
+#                                LAMBDA INTEGRATION                                     #
+#========================================================================================#
+
+resource "aws_apigatewayv2_integration" "lambda_integration" {
+  api_id           = aws_apigatewayv2_api.api.id
+  integration_type = "AWS_PROXY"
+  integration_uri  = var.lambda_invoke_arn
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "lambda_route" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "lambda_root_route" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "ANY /"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
 #========================================================================================#
@@ -53,7 +76,7 @@ resource "aws_cloudwatch_log_group" "api_gateway" {
   tags = {
     Name        = "${var.prefix_name}-${var.environment_name}-api-logs"
     Environment = var.environment_name
-    Owner       = "CloudDog"
+    Owner       = "fiap"
     CostCenter  = "FinOps"
   }
 }

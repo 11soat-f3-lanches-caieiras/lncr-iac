@@ -3,3 +3,4 @@ locals {
   environment_name = var.environment_name
   region          = "us-east-1"
 }
+

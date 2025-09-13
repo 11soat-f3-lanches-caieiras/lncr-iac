@@ -11,7 +11,7 @@ resource "aws_security_group" "openvpn_sg" {
     Name        = "${var.prefix_name}-${var.environment_name}-vpn-sg"
     CostCenter  = "FinOps"
     Environment = var.environment_name
-    Owner       = "CloudDog"
+    Owner       = "fiap"
   }
 }
 
@@ -206,7 +206,7 @@ resource "aws_secretsmanager_secret" "openvpn_secrets" {
   tags = {
     CostCenter  = "FinOps"
     Environment = "${var.environment_name}"
-    Owner       = "CloudDog"
+    Owner       = "fiap"
   }
 }
 
@@ -239,7 +239,7 @@ resource "aws_instance" "OpenVPN" {
     Name        = "${var.prefix_name}-openvpn-${var.environment_name}-ec2"
     CostCenter  = "FinOps"
     Environment = "${var.environment_name}"
-    Owner       = "CloudDog"
+    Owner       = "fiap"
   }
 
   root_block_device {

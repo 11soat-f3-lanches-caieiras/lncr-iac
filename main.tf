@@ -62,6 +62,25 @@ module "eks" {
 #                                API GATEWAY MODULE                                     #
 #========================================================================================#
 
+#========================================================================================#
+#                                LAMBDA MODULE                                          #
+#========================================================================================#
+
+module "lambda" {
+  source = "./modules/lambda"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+  function_name    = "api-handler"
+
+  api_gateway_execution_arn = module.api_gateway.execution_arn
+
+  environment_variables = {
+    ENVIRONMENT = local.environment_name
+    PREFIX      = local.prefix_name
+  }
+}
+
 module "api_gateway" {
   source = "./modules/api-gateway"
 
@@ -70,4 +89,5 @@ module "api_gateway" {
 
   cors_configuration = var.api_gateway_cors
   throttle_settings  = var.api_gateway_throttle
+  lambda_invoke_arn  = module.lambda.lambda_invoke_arn
 }
