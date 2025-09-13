@@ -38,7 +38,7 @@ module "flow_logs" {
 # DHCP Options
 ################################################################################
 resource "aws_vpc_dhcp_options" "dhcp_options" {
-  domain_name         = "${data.aws_region.current.name}.compute.internal"
+  domain_name         = "us-east-1.compute.internal"
   domain_name_servers = ["8.8.8.8", "8.8.4.4"]
   ntp_servers         = ["127.0.0.1"]
   tags = merge({

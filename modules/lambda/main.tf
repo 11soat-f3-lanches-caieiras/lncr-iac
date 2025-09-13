@@ -9,6 +9,9 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.lambda_execution_role.arn
   timeout       = var.timeout
 
+  s3_bucket = "placeholder-bucket"
+  s3_key    = "placeholder.zip"
+
   environment {
     variables = var.environment_variables
   }
@@ -21,7 +24,7 @@ resource "aws_lambda_function" "lambda" {
   }
 
   lifecycle {
-    ignore_changes = [filename, source_code_hash]
+    ignore_changes = [s3_bucket, s3_key, source_code_hash]
   }
 }
 
