@@ -1,0 +1,80 @@
+name: Deploy Infrastructure
+
+env:
+  TERRAFORM_VERSION: 1.5.7
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  plan:
+    name: Terraform Plan
+    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Terraform Init
+      run: terraform init
+      continue-on-error: false
+
+    - name: Terraform Validate
+      run: terraform validate
+      continue-on-error: false
+
+    - name: Terraform Plan
+      run: terraform plan -var-file="prd.tfvars" -out=tfplan
+      continue-on-error: false
+
+    - name: Upload Plan
+      uses: actions/upload-artifact@v4
+      with:
+        name: terraform-plan
+        path: tfplan
+
+  approve:
+    name: Manual Approval
+    runs-on: ubuntu-latest
+    needs: plan
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+    - name: Manual Approval Required
+      run: echo "Manual approval required for deployment"
+
+  deploy:
+    name: Terraform Deploy
+    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+
+    needs: [plan, approve]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Terraform Init
+      run: terraform init
+      continue-on-error: false
+
+    - name: Download Plan
+      uses: actions/download-artifact@v4
+      with:
+        name: terraform-plan
+
+    - name: Terraform Apply
+      run: terraform apply tfplan
+      continue-on-error: false
