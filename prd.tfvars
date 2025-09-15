@@ -57,3 +57,18 @@ api_gateway_throttle = {
   burst_limit = 5000
   rate_limit  = 10000
 }
+
+#========================================================================================#
+#                                ECR VARIABLES                                          #
+#========================================================================================#
+
+ecr_repository_names = ["app"]
+ecr_image_tag_mutability = "IMMUTABLE"
+ecr_scan_on_push = true
+
+#========================================================================================#
+#                               CODEBUILD VARIABLES                                     #
+#========================================================================================#
+
+codebuild_github_repo_url = "https://github.com/your-org/lncr-iac"
+codebuild_compute_type = "BUILD_GENERAL1_MEDIUM"

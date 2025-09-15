@@ -97,3 +97,48 @@ module "api_gateway" {
   throttle_settings  = var.api_gateway_throttle
   lambda_invoke_arn  = module.lambda.lambda_invoke_arn
 }
+
+#========================================================================================#
+#                                ECR MODULE                                             #
+#========================================================================================#
+
+module "ecr" {
+  source = "./modules/ecr"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+
+  repository_names      = var.ecr_repository_names
+  image_tag_mutability = var.ecr_image_tag_mutability
+  scan_on_push         = var.ecr_scan_on_push
+}
+
+#========================================================================================#
+#                               CODEBUILD MODULE                                        #
+#========================================================================================#
+
+module "codebuild" {
+  source = "./modules/codebuild"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+
+  vpc_id         = module.vpc.vpc_id
+  subnet_ids     = module.vpc.app_subnet_ids
+  github_repo_url = var.codebuild_github_repo_url
+  compute_type   = var.codebuild_compute_type
+}
+
+#========================================================================================#
+#                                  OUTPUTS                                              #
+#========================================================================================#
+
+output "codebuild_project_name" {
+  description = "CodeBuild project name"
+  value       = module.codebuild.codebuild_project_name
+}
+
+output "vpc_id" {
+  description = "VPC ID"
+  value       = module.vpc.vpc_id
+}

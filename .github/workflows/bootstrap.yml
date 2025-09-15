@@ -1,0 +1,67 @@
+name: Bootstrap Infrastructure
+
+env:
+  TERRAFORM_VERSION: 1.5.7
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'Deployment phase'
+        required: true
+        default: 'foundation'
+        type: choice
+        options:
+        - foundation
+        - complete
+
+jobs:
+  foundation:
+    name: Deploy Foundation (VPC + CodeBuild)
+    runs-on: ubuntu-latest
+    if: github.event.inputs.phase == 'foundation'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Deploy Foundation
+      run: |
+        terraform apply \
+          -target=module.vpc \
+          -target=module.codebuild \
+          -var-file="prd.tfvars" \
+          -auto-approve
+
+    - name: Output CodeBuild Name
+      run: |
+        echo "CodeBuild project created: $(terraform output -raw codebuild_project_name)"
+        echo "Update your main workflow to use this CodeBuild project"
+
+  complete:
+    name: Deploy Complete Infrastructure
+    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+    if: github.event.inputs.phase == 'complete'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Deploy Complete Infrastructure
+      run: terraform apply -var-file="prd.tfvars" -auto-approve

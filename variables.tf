@@ -107,3 +107,41 @@ variable "instance_type_node_eks" {
   description = "Instance type for EKS nodes"
   type        = string
 }
+
+#========================================================================================#
+#                                ECR VARIABLES                                          #
+#========================================================================================#
+
+variable "ecr_repository_names" {
+  description = "List of ECR repository names to create"
+  type        = list(string)
+  default     = ["app", "api", "worker"]
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "Image tag mutability setting for ECR repositories"
+  type        = string
+  default     = "MUTABLE"
+}
+
+variable "ecr_scan_on_push" {
+  description = "Enable image scanning on push for ECR repositories"
+  type        = bool
+  default     = true
+}
+
+#========================================================================================#
+#                               CODEBUILD VARIABLES                                     #
+#========================================================================================#
+
+variable "codebuild_github_repo_url" {
+  description = "GitHub repository URL for CodeBuild"
+  type        = string
+  default     = "https://github.com/your-org/lncr-iac"
+}
+
+variable "codebuild_compute_type" {
+  description = "CodeBuild compute type"
+  type        = string
+  default     = "BUILD_GENERAL1_MEDIUM"
+}
