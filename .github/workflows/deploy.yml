@@ -40,16 +40,18 @@ jobs:
         name: terraform-plan
         path: tfplan
 
-  approve:
-    name: Manual Approval
+  approval:
     runs-on: ubuntu-latest
-    needs: plan
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-    environment: production
-    
+    needs: build
+    permissions:
+      issues: write
     steps:
-    - name: Manual Approval Required
-      run: echo "Manual approval required for deployment"
+      - name: Manual Workflow Approval
+        uses: trstringer/manual-approval@v1.9.1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: gustavo-log
+          minimum-approvals: 1
 
   deploy:
     name: Terraform Deploy
