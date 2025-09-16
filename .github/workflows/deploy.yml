@@ -11,7 +11,7 @@ on:
 jobs:
   plan:
     name: Terraform Plan
-    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:
     - name: Checkout code
@@ -58,7 +58,7 @@ jobs:
 
   deploy:
     name: Terraform Deploy
-    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
 
     needs: [plan, approve]
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
