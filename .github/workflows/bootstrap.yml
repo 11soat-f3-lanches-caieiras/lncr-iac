@@ -55,7 +55,7 @@ jobs:
 
   complete:
     name: Deploy Complete Infrastructure
-    runs-on: codebuild-lncr-codebuild-infra-project-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
     if: github.event.inputs.phase == 'complete'
     
     steps:

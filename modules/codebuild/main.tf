@@ -1,7 +1,7 @@
 
 
 resource "aws_codebuild_project" "infra_project" {
-  name         = "${var.prefix_name}-codebuild-infra-project"
+  name         = "github-${var.prefix_name}-iac"
   service_role = aws_iam_role.codebuild_role.arn
 
   artifacts {
@@ -27,7 +27,7 @@ resource "aws_codebuild_project" "infra_project" {
   }
 
   tags = {
-    Name        = "${var.prefix_name}-codebuild-infra-project"
+    Name        = "github-${var.prefix_name}-iac"
     Environment = var.environment_name
     Owner       = "Fiap"
     CostCenter  = "FinOps"
