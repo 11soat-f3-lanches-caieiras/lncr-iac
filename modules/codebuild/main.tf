@@ -7,7 +7,6 @@ resource "aws_codebuild_fleet" "github_runner_fleet" {
   scaling_configuration {
     max_capacity = 5
     scaling_type = "TARGET_TRACKING_SCALING"
-    target_utilization_percent = 70
   }
 
   vpc_config {
