@@ -1,68 +1,4 @@
-resource "aws_iam_role" "fleet_service_role" {
-  name = "${var.prefix_name}-fleet-service-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "codebuild.amazonaws.com"
-      }
-    }]
-  })
-}
-
-resource "aws_iam_role_policy" "fleet_service_policy" {
-  name = "${var.prefix_name}-fleet-service-policy"
-  role = aws_iam_role.fleet_service_role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "ec2:CreateNetworkInterface",
-          "ec2:DescribeDhcpOptions",
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:DeleteNetworkInterface",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeVpcs",
-          "ec2:CreateNetworkInterfacePermission"
-        ]
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-resource "aws_codebuild_fleet" "github_runner_fleet" {
-  base_capacity    = 1
-  compute_type     = var.compute_type
-  environment_type = "LINUX_CONTAINER"
-  name             = "${var.prefix_name}-github-runner-fleet"
-  fleet_service_role = aws_iam_role.fleet_service_role.arn
-
-  scaling_configuration {
-    max_capacity = 5
-    scaling_type = "TARGET_TRACKING_SCALING"
-  }
-
-  vpc_config {
-    vpc_id = var.vpc_id
-    subnets = var.subnet_ids
-    security_group_ids = [aws_security_group.codebuild_sg.id]
-  }
-
-  tags = {
-    Name        = "${var.prefix_name}-github-runner-fleet"
-    Environment = var.environment_name
-    Owner       = "Fiap"
-    CostCenter  = "FinOps"
-  }
-}
 
 resource "aws_codebuild_project" "infra_project" {
   name         = "${var.prefix_name}-codebuild-infra-project"
@@ -77,9 +13,6 @@ resource "aws_codebuild_project" "infra_project" {
     image        = var.image
     type         = "LINUX_CONTAINER"
     privileged_mode = true
-    fleet {
-      fleet_arn = aws_codebuild_fleet.github_runner_fleet.arn
-    }
   }
 
   vpc_config {
