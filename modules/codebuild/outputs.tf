@@ -19,3 +19,8 @@ output "codebuild_security_group_id" {
   description = "CodeBuild security group ID"
   value       = aws_security_group.codebuild_sg.id
 }
+
+output "codebuild_webhook_url" {
+  description = "CodeBuild webhook URL for GitHub integration"
+  value       = aws_codebuild_webhook.github_runner_webhook.url
+}
