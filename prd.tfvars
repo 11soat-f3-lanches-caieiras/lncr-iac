@@ -70,5 +70,5 @@ ecr_scan_on_push = true
 #                               CODEBUILD VARIABLES                                     #
 #========================================================================================#
 
-codebuild_github_repo_url = "https://github.com/your-org/lncr-iac"
+codebuild_github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-iac"
 codebuild_compute_type = "BUILD_GENERAL1_MEDIUM"
