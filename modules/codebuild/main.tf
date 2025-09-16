@@ -1,3 +1,29 @@
+resource "aws_codebuild_fleet" "github_runner_fleet" {
+  base_capacity    = 1
+  compute_type     = var.compute_type
+  environment_type = "LINUX_CONTAINER"
+  name             = "${var.prefix_name}-github-runner-fleet"
+
+  scaling_configuration {
+    max_capacity = 5
+    scaling_type = "TARGET_TRACKING_SCALING"
+    target_utilization_percent = 70
+  }
+
+  vpc_config {
+    vpc_id = var.vpc_id
+    subnets = var.subnet_ids
+    security_group_ids = [aws_security_group.codebuild_sg.id]
+  }
+
+  tags = {
+    Name        = "${var.prefix_name}-github-runner-fleet"
+    Environment = var.environment_name
+    Owner       = "Fiap"
+    CostCenter  = "FinOps"
+  }
+}
+
 resource "aws_codebuild_project" "infra_project" {
   name         = "${var.prefix_name}-codebuild-infra-project"
   service_role = aws_iam_role.codebuild_role.arn
@@ -11,6 +37,9 @@ resource "aws_codebuild_project" "infra_project" {
     image        = var.image
     type         = "LINUX_CONTAINER"
     privileged_mode = true
+    fleet {
+      fleet_arn = aws_codebuild_fleet.github_runner_fleet.arn
+    }
   }
 
   vpc_config {
@@ -20,9 +49,8 @@ resource "aws_codebuild_project" "infra_project" {
   }
 
   source {
-    type = "GITHUB_ENTERPRISE"
+    type = "GITHUB"
     location = var.github_repo_url
-    buildspec = "buildspec.yml"
   }
 
   tags = {

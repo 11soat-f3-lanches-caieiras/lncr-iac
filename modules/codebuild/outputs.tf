@@ -3,6 +3,11 @@ output "codebuild_project_name" {
   value       = aws_codebuild_project.infra_project.name
 }
 
+output "codebuild_fleet_name" {
+  description = "CodeBuild fleet name for GitHub Actions"
+  value       = aws_codebuild_fleet.github_runner_fleet.name
+}
+
 output "codebuild_project_arn" {
   description = "CodeBuild project ARN"
   value       = aws_codebuild_project.infra_project.arn
