@@ -110,3 +110,15 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     ]
   })
 }
+
+resource "aws_codebuild_webhook" "github_runner_webhook" {
+  project_name = aws_codebuild_project.infra_project.name
+  build_type   = "BUILD"
+  
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "WORKFLOW_JOB_QUEUED"
+    }
+  }
+}
