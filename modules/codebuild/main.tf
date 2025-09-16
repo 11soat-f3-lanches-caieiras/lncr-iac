@@ -3,6 +3,7 @@
 resource "aws_codebuild_project" "infra_project" {
   name         = "github-${var.prefix_name}-iac"
   service_role = aws_iam_role.codebuild_role.arn
+  project_visibility = "PRIVATE"
 
   artifacts {
     type = "NO_ARTIFACTS"
@@ -22,8 +23,13 @@ resource "aws_codebuild_project" "infra_project" {
   }
 
   source {
-    type = "GITHUB"
+    type = "GITHUB_ENTERPRISE"
     location = var.github_repo_url
+    git_clone_depth = 1
+    
+    auth {
+      type = "OAUTH"
+    }
   }
 
   tags = {
@@ -31,6 +37,7 @@ resource "aws_codebuild_project" "infra_project" {
     Environment = var.environment_name
     Owner       = "Fiap"
     CostCenter  = "FinOps"
+    ProjectType = "RUNNER"
   }
 }
 
