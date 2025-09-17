@@ -145,3 +145,41 @@ variable "codebuild_compute_type" {
   type        = string
   default     = "BUILD_GENERAL1_MEDIUM"
 }
+
+#========================================================================================#
+#                            SECRETS MANAGER VARIABLES                                 #
+#========================================================================================#
+
+variable "secrets_manager_recovery_window" {
+  description = "Number of days that AWS Secrets Manager waits before it can delete the secret"
+  type        = number
+  default     = 7
+}
+
+#========================================================================================#
+#                               FSX OPENZFS VARIABLES                                   #
+#========================================================================================#
+
+variable "fsx_storage_capacity" {
+  description = "FSx OpenZFS storage capacity in GiB"
+  type        = number
+  default     = 64
+}
+
+variable "fsx_throughput_capacity" {
+  description = "FSx OpenZFS throughput capacity in MBps"
+  type        = number
+  default     = 64
+}
+
+variable "fsx_deployment_type" {
+  description = "FSx OpenZFS deployment type"
+  type        = string
+  default     = "SINGLE_AZ_1"
+}
+
+variable "fsx_backup_retention_days" {
+  description = "Number of days to retain FSx OpenZFS automatic backups"
+  type        = number
+  default     = 7
+}

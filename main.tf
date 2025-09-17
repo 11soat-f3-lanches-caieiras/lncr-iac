@@ -130,6 +130,36 @@ module "codebuild" {
 }
 
 #========================================================================================#
+#                             SECRETS MANAGER MODULE                                    #
+#========================================================================================#
+
+module "secrets_manager" {
+  source = "./modules/secrets-manager"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+
+  recovery_window_in_days = var.secrets_manager_recovery_window
+}
+
+#========================================================================================#
+#                               FSX OPENZFS MODULE                                      #
+#========================================================================================#
+
+module "fsx_openzfs" {
+  source = "./modules/fsx-openzfs"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+
+  subnet_ids                      = module.vpc.app_subnet_ids
+  storage_capacity               = var.fsx_storage_capacity
+  throughput_capacity            = var.fsx_throughput_capacity
+  deployment_type                = var.fsx_deployment_type
+  automatic_backup_retention_days = var.fsx_backup_retention_days
+}
+
+#========================================================================================#
 #                                  OUTPUTS                                              #
 #========================================================================================#
 
