@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.lambda_execution_role.arn
   timeout       = var.timeout
 
-  s3_bucket = "placeholder-bucket"
+  s3_bucket = "custom-authorizer-bucket"  
   s3_key    = "placeholder.zip"
 
   environment {

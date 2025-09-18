@@ -152,7 +152,7 @@ module "fsx_openzfs" {
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
 
-  subnet_ids                      = module.vpc.app_subnet_ids
+  subnet_ids                      = [module.vpc.app_subnet_ids[0]]
   storage_capacity               = var.fsx_storage_capacity
   throughput_capacity            = var.fsx_throughput_capacity
   deployment_type                = var.fsx_deployment_type
