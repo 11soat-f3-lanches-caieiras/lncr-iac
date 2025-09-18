@@ -1,19 +1,26 @@
 openapi: 3.0.1
 info:
-  title: Lanches Caieiras
+  title: lncr-prd-apigateway
   description: 'Gerenciador de Pedidos, Ordem de Preparo, Produtos e Pagamento da Lanches Caieiras'
   contact:
-    email: titoparizotto@gmail.com
-    name: Tito de Morais Parizotto
+    name: Equipe Desenvolvimento - Lanches Caieiras
+    x-teams:
+      developer:
+        name: Tito Parizotto (361184)
+        email: titoparizotto@gmail.com
+      devops:
+        name: Gustavo Silva (361477)
+        email: gustavosilva18052005@gmail.com
   version: 2.1.0
 servers:
-  - url: 'http://localhost:8080/v2'
+  - url: '/lanchesCaieiras/v2'
 tags:
   - name: Customers
   - name: CustomerOrders
   - name: FoodItems
   - name: KitchenOrders
   - name: Notifications
+  - name: Oauth2
   - name: Payments
   - name: CollectionOperations
     description: Operações que utilizam arquétipos de coleções
@@ -28,6 +35,8 @@ paths:
       tags:
         - Customers
         - CollectionOperations
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/CreateCustomer'
       responses:
@@ -46,6 +55,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/Limit'
       responses:
@@ -63,6 +74,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerId'
       responses:
@@ -79,6 +92,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerId'
       requestBody:
@@ -97,6 +112,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerId'
       responses:
@@ -114,6 +131,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderIdList'
       responses:
@@ -129,6 +148,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/DocumentNumber'
       responses:
@@ -145,6 +166,8 @@ paths:
       tags:
         - Customers
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/DocumentNumber'
       requestBody:
@@ -164,6 +187,8 @@ paths:
       tags:
         - CustomerOrders
         - CollectionOperations
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/CreateCustomerOrder'
       responses:
@@ -181,6 +206,8 @@ paths:
       tags:
         - CustomerOrders
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderId'
       responses:
@@ -202,6 +229,8 @@ paths:
       tags:
         - CustomerOrders
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderStatusList'
         - $ref: '#/components/parameters/IncludeFoodItems'
@@ -220,6 +249,8 @@ paths:
       tags:
         - CustomerOrders
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderId'
         - $ref: '#/components/parameters/CustomerOrderNewStatus'
@@ -239,6 +270,8 @@ paths:
       tags:
         - FoodItems
         - CollectionOperations
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/CreateFoodItem'
       responses:
@@ -255,6 +288,8 @@ paths:
       tags:
         - FoodItems
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/FoodStatus'
         - $ref: '#/components/parameters/FoodCategory'
@@ -273,6 +308,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/FoodItemId'
       responses:
@@ -289,6 +326,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/FoodItemId'
       requestBody:
@@ -307,6 +346,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/FoodItemId'
       responses:
@@ -326,6 +367,8 @@ paths:
         - CollectionOperations
       parameters:
         - $ref: "#/components/parameters/FoodItemId"
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: "#/components/requestBodies/CreateFoodItemImage"
       responses:
@@ -344,6 +387,8 @@ paths:
       tags:
         - FoodItems
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/FoodItemId"
         - $ref: "#/components/parameters/IncludeData"
@@ -359,6 +404,8 @@ paths:
       tags:
         - FoodItems
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/FoodItemId"
       responses:
@@ -376,6 +423,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/ImageId'
       responses:
@@ -392,6 +441,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ImageId"
       requestBody:
@@ -410,6 +461,8 @@ paths:
       tags:
         - FoodItems
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ImageId"
       responses:
@@ -427,6 +480,8 @@ paths:
       tags:
         - KitchenOrders
         - CollectionOperations
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/CreateKitchenOrder'
       responses:
@@ -445,6 +500,8 @@ paths:
       tags:
         - KitchenOrders
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/KitchenCustomerOrderId'
         - $ref: '#/components/parameters/KitchenOrderStatusQuery'
@@ -463,6 +520,8 @@ paths:
       tags:
         - KitchenOrders
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/KitchenOrderId'
         - $ref: '#/components/parameters/IncludeFoodItems'
@@ -485,6 +544,8 @@ paths:
       tags:
         - KitchenOrders
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/KitchenOrderStatusList'
         - $ref: '#/components/parameters/IncludeFoodItems'
@@ -503,6 +564,8 @@ paths:
       tags:
         - KitchenOrders
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderId'
         - $ref: '#/components/parameters/IncludeFoodItems'
@@ -521,6 +584,8 @@ paths:
       tags:
         - KitchenOrders
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/KitchenOrderId'
         - $ref: '#/components/parameters/KitchenOrderNewStatus'
@@ -534,7 +599,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/notifications/':
+  '/notifications':
     get:
       operationId: getNotificationsTypeList
       description: Buscar lista de notificações existentes
@@ -542,6 +607,8 @@ paths:
       tags:
         - Notifications
         - CollectionOperations
+      security:
+        - bearerAuth: []
       responses:
         '200':
           $ref: "#/components/responses/ListNotificationsTypes"
@@ -555,6 +622,8 @@ paths:
       tags:
         - Notifications
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/NotificationType"
       responses:
@@ -566,6 +635,26 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/InternalServerError"
+  '/oauth/token':
+    post:
+      operationId: requestToken
+      description: Cria de Token dea cesso oauth2
+      summary: Cria de Token dea cesso oauth2
+      tags:
+        - Oauth2
+        - CollectionOperations
+      security:
+        - basicAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/TokenRequestBody"
+      responses:
+        '200':
+          $ref: "#/components/schemas/TokenResponseType"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+
   '/payments/mercadoPago/charge':
     post:
       operationId: createPaymentCharge
@@ -574,6 +663,8 @@ paths:
       tags:
         - Payments
         - CollectionOperations
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/CreatePaymentCharge'
       responses:
@@ -591,6 +682,8 @@ paths:
       tags:
         - Payments
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/MercadoPagoPaymentDataExternalReference"
         - $ref: "#/components/parameters/MercadoPagoPaymentDataId"
@@ -610,6 +703,8 @@ paths:
       tags:
         - Payments
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderId'
       responses:
@@ -629,6 +724,8 @@ paths:
       tags:
         - Payments
         - ManagedOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/CustomerOrderId'
       responses:
@@ -648,6 +745,8 @@ paths:
       tags:
         - Payments
         - CollectionOperations
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/MercadoPagoPaymentDataExternalReference'
         - $ref: '#/components/parameters/MercadoPagoPaymentDataId'
@@ -911,6 +1010,20 @@ components:
               value:
                 description: 'Pão de Hamburger com gergelim, hamburger bovino de 120g, queijo, tomate, salada, maionese, ketchup.'
                 price: 19.99
+    TokenRequestBody:
+      description: Request Body para solicitar novo token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TokenRequestType"
+          examples:
+            NewTokenRequest:
+              summary: Solicitação de novo token de acesso
+              value:
+                grant_type: "client_credentials"
+                scope: "customer"
+
+
     UpdateFoodItemImage:
       description: Requesty body para atualizar uma imagem de um item de alimentação.
       content:
@@ -1088,6 +1201,24 @@ components:
                       locatiton: "Tamanho da imagem excede o limite de 524288 bytes"
                     - id: 5
                       locatiton: "https://localhost:8080/foodItems/1"
+    CreatedToken:
+      description: Token de acesso criado
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TokenResponseTemplate"
+          examples:
+            CreatedToken:
+              summary: Exemplo de Token de acesso criado
+              value:
+                _response:
+                  _traceId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  _timestamp: '2025-02-12T21:41:43.286Z'
+                _content:
+                  accessToken: "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAYAAAADBl3iAAAAAXNSR0Iadasdasda" #JWT
+                  tokenType: "Bearer"
+                  expiresIn: 315360
+
     CreatedFoodItemImage:
       description: Imagem de um Item Alimentacao criado com sucesso
       content:
@@ -1745,6 +1876,7 @@ components:
                   customer:
                     id: 1
                     name: "Tereza Nina Monteiro"
+
     UpdatedFoodItemImage:
       description: Imagem atualizada.
       content:
@@ -1970,6 +2102,12 @@ components:
       schema:
         type: string
         format: uri
+
+    Authorization:
+      description: Credencial de Authorization
+      required: true
+      schema:
+        type: string
   schemas:
     CreateCustomerOrderType:
       allOf:
@@ -2356,6 +2494,7 @@ components:
           description: Data da criação da notificação
           type: string
           format: date-time
+
     OrderTemplate:
       description: Modelo de Dados base de uma ordem genérica
       type: object
@@ -2457,6 +2596,52 @@ components:
               type: string
               description: Menssagem de resposta
               maxLength: 50
+    TokenRequestTemplate:
+      description: Modelo de dados de solicitação de token
+      type: object
+      properties:
+        grant_type:
+          type: string
+          enum:
+            - client_credentials
+        scope:
+          type: string
+          enum:
+            - admin
+            - customer
+            - totem
+            - monitor
+    TokenRequestType:
+      description: Tipo do Request Body de solicitação de token
+      allOf:
+        - $ref: "#/components/schemas/TokenRequestTemplate"
+    TokenResponseTemplate:
+      description: Modelo de dados de respota de token
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: Token de acesso JWT
+        tokenType:
+          type: string
+        expiresIn:
+          type: integer
+          description: Tempo de expiração em segundos
+          example: 31536000
+      required:
+        - accessToken
+        - tokenType
+        - expiresIn
+    TokenResponseType:
+      description: Tipo do Response de solicitação de token
+      allOf:
+        - $ref: "#/components/schemas/ResponseTemplate"
+      properties:
+        _content:
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/TokenResponseTemplate"
+
     UpdatedCustomerOrderStatusType:
       description: Retorno para atualização de status de preparo
       allOf:
@@ -2479,3 +2664,11 @@ components:
       description: Atualização de imagem.
       allOf:
         - $ref: '#/components/schemas/ImageTemplate'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
