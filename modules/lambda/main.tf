@@ -5,7 +5,7 @@
 data "archive_file" "lambda_zip" {
   type        = "zip"
   output_path = "${path.module}/lambda.zip"
-  source_file = "${path.module}/template/empty.txt"
+  source_file = "${path.module}/templates/empty.txt"
 }
 
 resource "aws_lambda_function" "lambda" {
