@@ -2,6 +2,15 @@
 #                                  LAMBDA RESOURCES                                      #
 #========================================================================================#
 
+data "archive_file" "empty_zip" {
+  type        = "zip"
+  output_path = "${path.module}/empty.zip"
+  source {
+    content  = ""
+    filename = "empty.txt"
+  }
+}
+
 resource "aws_lambda_function" "lambda" {
   function_name = "${var.prefix_name}-${var.function_name}"
   handler       = var.handler
@@ -9,8 +18,8 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.lambda_execution_role.arn
   timeout       = var.timeout
 
-  s3_bucket = "custom-authorizer-bucket"  
-  s3_key    = "placeholder.zip"
+  filename         = data.archive_file.empty_zip.output_path
+  source_code_hash = data.archive_file.empty_zip.output_base64sha256
 
   environment {
     variables = var.environment_variables
@@ -24,7 +33,7 @@ resource "aws_lambda_function" "lambda" {
   }
 
   lifecycle {
-    ignore_changes = [s3_bucket, s3_key, source_code_hash]
+    ignore_changes = [filename, source_code_hash]
   }
 }
 

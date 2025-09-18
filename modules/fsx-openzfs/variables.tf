@@ -25,6 +25,11 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
+variable "vpc_id" {
+  description = "VPC ID where FSx OpenZFS will be deployed"
+  type        = string
+}
+
 variable "security_group_ids" {
   description = "List of security group IDs for FSx OpenZFS"
   type        = list(string)

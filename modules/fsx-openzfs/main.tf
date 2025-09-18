@@ -38,6 +38,7 @@ resource "aws_security_group" "fsx_sg" {
 
   name_prefix = "${var.prefix_name}-fsx-openzfs-sg"
   description = "Security group for FSx OpenZFS"
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 111
