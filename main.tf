@@ -46,6 +46,7 @@ module "eks" {
 
   providers = {
     aws.virginia = aws.virginia
+    kubernetes   = kubernetes
   }
 
   prefix_name                    = local.prefix_name

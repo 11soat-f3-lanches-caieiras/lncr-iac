@@ -6,7 +6,7 @@ data "archive_file" "empty_zip" {
   type        = "zip"
   output_path = "${path.module}/empty.zip"
   source {
-    content  = ""
+    content  = "# Empty file for Lambda placeholder"
     filename = "empty.txt"
   }
 }
