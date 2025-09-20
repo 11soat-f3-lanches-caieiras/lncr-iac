@@ -81,6 +81,52 @@ variable "api_gateway_throttle" {
 }
 
 #========================================================================================#
+#                               API GATEWAY AUTHORIZATION ROUTES                        #
+#========================================================================================#
+
+variable "authorization_routes" {
+  description = "Lista de rotas (método + path) que exigem autorização customizada no API Gateway."
+  type        = list(string)
+  default = [
+    "POST /customers",
+    "GET /customers",
+    "GET /customer/{customerId}",
+    "PATCH /customer/{customerId}",
+    "DELETE /customer/{customerId}",
+    "GET /customer/listIds/{customerIdList}",
+    "GET /customer/documentNumber/{documentNumber}",
+    "PATCH /customer/documentNumber/{documentNumber}",
+    "POST /customerOrders",
+    "GET /customerOrder/{customerOrderId}",
+    "GET /customerOrders/status/{statusList}",
+    "PATCH /customerOrder/{customerOrderId}/updateStatus/{newStatus}",
+    "POST /foodItems",
+    "GET /foodItems",
+    "GET /foodItems/{foodItemId}",
+    "PATCH /foodItems/{foodItemId}",
+    "DELETE /foodItems/{foodItemId}",
+    "POST /foodItems/{foodItemId}/images",
+    "GET /foodItems/{foodItemId}/images",
+    "DELETE /foodItems/{foodItemId}/images",
+    "GET /foodItems/image/{foodItemImageId}",
+    "PUT /foodItems/image/{foodItemImageId}",
+    "DELETE /foodItems/image/{foodItemImageId}",
+    "POST /kitchenOrders",
+    "GET /kitchenOrders",
+    "GET /kitchenOrders/{kitchenOrderId}",
+    "GET /kitchenOrders/status/{statusList}",
+    "GET /kitchenOrders/customerOrder/{customerOrderId}",
+    "PATCH /kitchenOrders/{kitchenOrderId}/updateStatus/{newStatus}",
+    "GET /notifications/",
+    "GET /notifications/{notificationType}",
+    "POST /payments/mercadoPago/charge",
+    "PATCH /payments/mercadoPago/paymentReceived",
+    "GET /payments/mercadoPago/{customerOrderId}/get",
+    "PATCH /payments/mercadoPago/{customerOrderId}/cancel"
+  ]
+}
+
+#========================================================================================#
 #                                 OPENVPN VARIABLES                                      #
 #========================================================================================#
 
