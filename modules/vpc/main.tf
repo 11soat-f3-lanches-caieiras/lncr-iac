@@ -1,5 +1,5 @@
 module "subnet_calculator" {
-  source = "modules/calculate-subnets"
+  source = "./modules/calculate-subnets"
 
   cidr_block          = var.vpc_cidr
   number_of_azs       = var.number_of_azs
@@ -27,7 +27,7 @@ resource "aws_vpc" "vpc" {
 module "flow_logs" {
   count = var.enable_vpc_flow_logs ? 1 : 0
 
-  source = "modules/flow-logs"
+  source = "./modules/flow-logs"
 
   prefix_name = var.prefix_name
   environment   = var.environment

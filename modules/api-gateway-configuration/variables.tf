@@ -16,8 +16,8 @@ variable "environment_name" {
   }
 }
 
-variable "defaul_region" {
-  type  = string
+variable "default_region" {
+  type    = string
   default = "us-east-1"
 }
 
@@ -52,6 +52,7 @@ variable "throttle_settings" {
 variable "lambda_invoke_arn" {
   description = "Lambda function invoke ARN for API Gateway integration"
   type        = string
+  default     = ""
 }
 
 variable "lambda_function_arn" {
@@ -59,25 +60,26 @@ variable "lambda_function_arn" {
   type  = string
 }
 
-variable "api_gateway_api_id"{
+variable "api_gateway_api_id" {
   description = "API Gateway v2 API ID"
-  type: string
+  type        = string
 }
 
-variable "vcp_subnet_ids" {
+variable "vpc_subnet_ids" {
   description = "List of VPC subnet IDs for API Gateway VPC Link"
-  type: list(string)
+  type        = list(string)
 }
 
 variable "security_group_ids" {
   description = "List of security group IDs for API Gateway VPC Link"
-  type        = string
+  type        = list(string)
+  default     = []
 }
 
-variable "eks-dns-nlb" {
-    description = "DNS name of the NLB for EKS cluster"
-    type        = string
-    default = env("EXTERNAL_DNS_NLB")
+variable "eks_dns_nlb" {
+  description = "DNS name of the NLB for EKS cluster"
+  type        = string
+  default     = ""
 }
 
 variable "authorization_routes" {

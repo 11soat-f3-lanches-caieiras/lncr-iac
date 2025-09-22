@@ -183,7 +183,7 @@ module "fsx_openzfs" {
 
 
 module "api-gateway-integration" {
-  source = "modules/api-gateway-configuration"
+  source = "./modules/api-gateway-configuration"
 
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
