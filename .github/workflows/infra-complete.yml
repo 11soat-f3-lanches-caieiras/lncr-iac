@@ -1,0 +1,40 @@
+name: Complete Infrastructure
+
+env:
+  TERRAFORM_VERSION: 1.5.7
+
+on:
+  workflow_run:
+    workflows: ["Deploy Application"]  # Nome do workflow do repo app
+    types: [completed]
+
+jobs:
+  complete-infra:
+    name: Complete Infrastructure Setup
+    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Get NLB DNS from EKS
+      run: |
+        # Buscar DNS do NLB criado pelo Helm
+        NLB_DNS=$(kubectl get svc -n default -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}')
+        echo "NLB_DNS=$NLB_DNS" >> $GITHUB_ENV
+
+    - name: Deploy API Gateway with NLB
+      run: |
+        terraform init
+        terraform apply \
+          -target=module.api_gateway \
+          -target=module.lambda \
+          -var="nlb_dns_name=$NLB_DNS" \
+          -var-file="prd.tfvars" \
+          -auto-approve

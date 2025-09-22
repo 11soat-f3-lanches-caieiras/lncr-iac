@@ -29,6 +29,8 @@ resource "aws_lambda_function" "lambda" {
     CostCenter  = "FinOps"
   }
 
+  depends_on = [data.archive_file.lambda_zip]
+
   lifecycle {
     ignore_changes = [filename, source_code_hash]
   }

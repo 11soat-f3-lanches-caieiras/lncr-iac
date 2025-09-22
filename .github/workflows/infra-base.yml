@@ -1,0 +1,35 @@
+name: Infra Base
+
+env:
+  TERRAFORM_VERSION: 1.5.7
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  deploy-base:
+    name: Deploy Base Infrastructure
+    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Deploy Base Infrastructure
+      run: |
+        terraform init
+        terraform apply \
+          -target=module.vpc \
+          -target=module.eks \
+          -target=module.ecr \
+          -target=module.secrets_manager \
+          -target=module.fsx_openzfs \
+          -var-file="prd.tfvars" \
+          -auto-approve
