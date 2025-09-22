@@ -16,6 +16,13 @@ variable "environment_name" {
   }
 }
 
+variable "defaul_region" {
+  type  = string
+  default = "us-east-1"
+}
+
+
+
 #========================================================================================#
 #                                 API GATEWAY VARIABLES                                  #
 #========================================================================================#
@@ -42,7 +49,7 @@ variable "throttle_settings" {
   default = {}
 }
 
-variable "lambda_invoke_arn" {
-  description = "Lambda function invoke ARN for API Gateway integration"
-  type        = string
-}
+
+
+
+

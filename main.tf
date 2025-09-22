@@ -60,10 +60,6 @@ module "eks" {
 }
 
 #========================================================================================#
-#                                API GATEWAY MODULE                                     #
-#========================================================================================#
-
-#========================================================================================#
 #                                LAMBDA MODULE                                          #
 #========================================================================================#
 
@@ -80,13 +76,9 @@ module "lambda" {
   }
 }
 
-resource "aws_lambda_permission" "api_gateway_invoke" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = module.lambda.lambda_function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${module.api_gateway.execution_arn}/*/*"
-}
+#========================================================================================#
+#                                API GATEWAY MODULE                                     #
+#========================================================================================#
 
 module "api_gateway" {
   source = "./modules/api-gateway"
@@ -96,8 +88,36 @@ module "api_gateway" {
 
   cors_configuration = var.api_gateway_cors
   throttle_settings  = var.api_gateway_throttle
-  lambda_invoke_arn  = module.lambda.lambda_invoke_arn
+
+
 }
+
+#========================================================================================#
+#                                API GATEWAY CONFIGURATION                               #
+#========================================================================================#
+
+module "api_gateway-configuration" {
+  source = "./modules/api-gateway-configuration"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+  api_gateway_api_id = module.api_gateway.api_id
+  lambda_function_arn = module.lambda.lambda_function_arn
+  vcp_subnet_ids = module.vpc.app_subnet_ids
+  security_group_ids = module.eks.cluster_security_group_id
+
+}
+
+
+resource "aws_lambda_permission" "api_gateway_invoke" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = module.lambda.lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${module.api_gateway.execution_arn}/*/*"
+}
+
+
 
 #========================================================================================#
 #                                ECR MODULE                                             #
@@ -149,6 +169,21 @@ module "secrets_manager" {
 
 module "fsx_openzfs" {
   source = "./modules/fsx-openzfs"
+
+  prefix_name      = local.prefix_name
+  environment_name = local.environment_name
+
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                      = [module.vpc.app_subnet_ids[0]]
+  storage_capacity               = var.fsx_storage_capacity
+  throughput_capacity            = var.fsx_throughput_capacity
+  deployment_type                = var.fsx_deployment_type
+  automatic_backup_retention_days = var.fsx_backup_retention_days
+}
+
+
+module "api-gateway-integration" {
+  source = "modules/api-gateway-configuration"
 
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
