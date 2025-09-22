@@ -229,3 +229,13 @@ variable "fsx_backup_retention_days" {
   type        = number
   default     = 7
 }
+
+#========================================================================================#
+#                               EKS NLB VARIABLES                                       #
+#========================================================================================#
+
+variable "eks_dns_nlb" {
+  description = "DNS name of the NLB for EKS cluster"
+  type        = string
+  default     = ""
+}
