@@ -27,20 +27,20 @@ jobs:
       run: |
         aws eks update-kubeconfig --region us-east-1 --name lncr-prd-eks
     
-    - name: Get NLB DNS from EKS
-      run: |
-        # Buscar DNS do NLB criado pelo Helm
-        NLB_DNS=$(kubectl get svc -n default -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}' | head -1)
-        if [ -z "$NLB_DNS" ]; then
-          echo "Error: NLB DNS not found"
-          exit 1
-        fi
-        echo "NLB_DNS=$NLB_DNS" >> $GITHUB_ENV
-        echo "Found NLB DNS: $NLB_DNS"
+    # - name: Get NLB DNS from EKS
+    #   run: |
+    #     # Buscar DNS do NLB criado pelo Helm
+    #     NLB_DNS=$(kubectl get svc -n default -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}' | head -1)
+    #     if [ -z "$NLB_DNS" ]; then
+    #       echo "Error: NLB DNS not found"
+    #       exit 1
+    #     fi
+    #     echo "NLB_DNS=$NLB_DNS" >> $GITHUB_ENV
+    #     echo "Found NLB DNS: $NLB_DNS"
 
     - name: Deploy API Gateway Configuration with NLB
-      env:
-        TF_VAR_eks_dns_nlb: ${{ env.NLB_DNS }}
+      # env:
+      #   TF_VAR_eks_dns_nlb: ${{ env.NLB_DNS }}
       run: |
         terraform init
         terraform apply \
