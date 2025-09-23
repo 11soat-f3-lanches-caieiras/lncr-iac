@@ -164,7 +164,6 @@ module "api-gateway-integration" {
   environment_name    = local.environment_name
   api_gateway_api_id  = module.api_gateway.api_id
   lambda_function_arn = module.lambda.lambda_function_arn
-  lambda_invoke_arn   = module.lambda.lambda_invoke_arn
   vpc_subnet_ids      = module.vpc.app_subnet_ids
   security_group_ids  = [module.eks.cluster_security_group_id]
   eks_dns_nlb         = var.eks_dns_nlb
