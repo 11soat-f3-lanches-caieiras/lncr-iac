@@ -88,7 +88,6 @@ module "api_gateway" {
 
   cors_configuration = var.api_gateway_cors
   throttle_settings  = var.api_gateway_throttle
-  lambda_invoke_arn = module.lambda.lambda_invoke_arn
 }
 
 #========================================================================================#
