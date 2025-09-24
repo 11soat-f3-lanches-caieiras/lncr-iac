@@ -8,6 +8,9 @@ on:
     workflows: ["Deploy Application"]  # Nome do workflow do repo app
     types: [completed]
 
+  workflow_dispatch:
+
+
 jobs:
   complete-infra:
     name: Complete Infrastructure Setup
