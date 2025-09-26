@@ -34,17 +34,19 @@ jobs:
       run: |
         aws eks update-kubeconfig --region us-east-1 --name lncr-prd-eks
 
+    
+
     - name: Get NLB Listener ARN from EKS
       run: |
-        # Buscar DNS do NLB criado pelo Helm
-        NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)
+        # Use diretamente o ARN conhecido do NLB
+        NLB_ARN="arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc"
         NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
-        if [ -z "NLB_LISTENER_ARN" ]; then
-          echo "Error: NLB DNS not found"
+        echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
+        if [ -z "$NLB_LISTENER_ARN" ]; then
+          echo "Error: NLB Listener ARN not found"
           exit 1
         fi
         echo "NLB_LISTENER_ARN=$NLB_LISTENER_ARN" >> $GITHUB_ENV
-        echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
 
     - name: Deploy API Gateway Configuration with NLB
       env:
@@ -54,6 +56,5 @@ jobs:
         terraform apply \
           -target=module.api-gateway-integration \
           -var="eks_nlb_listener_arn=${{ env.NLB_LISTENER_ARN }}" \
-          -var="cluster_version=1.33" \
           -var-file="prd.tfvars" \
           -auto-approve

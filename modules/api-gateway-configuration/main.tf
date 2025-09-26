@@ -21,7 +21,7 @@ resource "aws_apigatewayv2_integration" "eks_nlb" {
 resource "aws_apigatewayv2_route" "lambda_root_route" {
   api_id    = var.api_gateway_api_id
   route_key = "ANY /"
-  target    = "integrations/${aws_apigatewayv2_authorizer.lambda_integration.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
 }
 
 #========================================================================================#
