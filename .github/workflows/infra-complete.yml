@@ -33,7 +33,8 @@ jobs:
     - name: Get NLB DNS from EKS
       run: |
         # Buscar DNS do NLB criado pelo Helm
-        NLB_DNS=$(kubectl get svc -n default -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}' | head -1)
+        NLB_DNS=$(kubectl get svc -n fiap -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}' | head -1)
+        echo "NLB_DNS found: $NLB_DNS"
         if [ -z "$NLB_DNS" ]; then
           echo "Error: NLB DNS not found"
           exit 1
