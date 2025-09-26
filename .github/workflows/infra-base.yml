@@ -33,3 +33,15 @@ jobs:
           -target=module.fsx_openzfs \
           -var-file="prd.tfvars" \
           -auto-approve
+          
+    - name: Trigger lncr-app deployment
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: 11soat-f3-lanches-caieiras/lncr-app
+        event-type: infra-base-completed
+        client-payload: |
+          {
+            "branch": "${{ github.ref_name }}",
+            "commit": "${{ github.sha }}"
+          }
