@@ -15,7 +15,6 @@ resource "aws_apigatewayv2_integration" "eks_nlb" {
   integration_uri        = var.eks_nlb_listener_arn
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.eks_vpc_link.id
-  payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_route" "lambda_root_route" {

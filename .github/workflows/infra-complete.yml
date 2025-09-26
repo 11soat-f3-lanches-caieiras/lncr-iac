@@ -39,7 +39,7 @@ jobs:
     - name: Get NLB Listener ARN from EKS
       run: |
         # Use diretamente o ARN conhecido do NLB
-        NLB_ARN="arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc"
+        NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)
         NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
         echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
         if [ -z "$NLB_LISTENER_ARN" ]; then
@@ -47,6 +47,19 @@ jobs:
           exit 1
         fi
         echo "NLB_LISTENER_ARN=$NLB_LISTENER_ARN" >> $GITHUB_ENV
+
+    - name: Get Function ARN
+      env:
+        FUNCTION_NAME: "lncr-prd-custom-authorizer"
+      run: |
+        FUNCTION_ARN=$(aws lambda get-function --function-name $FUNCTION_NAME --query 'Configuration.FunctionArn' --output text))
+        
+        echo "FUNCTION_ARN found: $FUNCTION_ARN"
+        if [ -z "$FUNCTION_ARN" ]; then
+          echo "Error: Function ARN not found"
+          exit 1
+        fi
+        echo "FUNCTION_ARN=$FUNCTION_ARN" >> $GITHUB_ENV
 
     - name: Deploy API Gateway Configuration with NLB
       env:
@@ -56,5 +69,6 @@ jobs:
         terraform apply \
           -target=module.api-gateway-configuration \
           -var="eks_nlb_listener_arn=${{ env.NLB_LISTENER_ARN }}" \
+          -var="lambda_function_arn=${{ env.FUNCTION_ARN }}" \
           -var-file="prd.tfvars" \
           -auto-approve
