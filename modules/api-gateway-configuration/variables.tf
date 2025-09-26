@@ -113,7 +113,7 @@ variable "authorization_routes" {
     "GET /kitchenOrders/status/{statusList}",
     "GET /kitchenOrders/customerOrder/{customerOrderId}",
     "PATCH /kitchenOrders/{kitchenOrderId}/updateStatus/{newStatus}",
-    "GET /notifications/",
+    "GET /notifications",
     "GET /notifications/{notificationType}",
     "POST /payments/mercadoPago/charge",
     "PATCH /payments/mercadoPago/paymentReceived",

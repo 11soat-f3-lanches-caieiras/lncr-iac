@@ -41,7 +41,7 @@ resource "aws_apigatewayv2_authorizer" "lambda_integration" {
 resource "aws_apigatewayv2_route" "secured_route" {
   for_each = toset(var.authorization_routes)
   api_id    = var.api_gateway_api_id
-  route_key = each.value
+  route_key = replace(each.value, "//$", "/")
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
   target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
