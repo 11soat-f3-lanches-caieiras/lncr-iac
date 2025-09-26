@@ -76,9 +76,10 @@ variable "security_group_ids" {
   default     = []
 }
 
-variable "eks_dns_nlb" {
-  description = "DNS name of the NLB for EKS cluster"
+variable "eks_nlb_listener_arn" {
+  description = "arn of the EKS NLB listener for API Gateway integration"
   type        = string
+  default     = env("NLB_LISTENER_ARN")
 }
 
 variable "authorization_routes" {

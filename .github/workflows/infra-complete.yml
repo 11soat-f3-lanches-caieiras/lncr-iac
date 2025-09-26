@@ -37,18 +37,19 @@ jobs:
     - name: Get NLB DNS from EKS
       run: |
         # Buscar DNS do NLB criado pelo Helm
-        NLB_DNS=$(kubectl get svc -n fiap -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].hostname}' | head -1)
-        echo "NLB_DNS found: $NLB_DNS"
-        if [ -z "$NLB_DNS" ]; then
+        NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)
+        NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
+        echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
+        if [ -z "NLB_LISTENER_ARN" ]; then
           echo "Error: NLB DNS not found"
           exit 1
         fi
-        echo "NLB_DNS=$NLB_DNS" >> $GITHUB_ENV
-        echo "Found NLB DNS: $NLB_DNS"
+        echo "NLB_LISTENER_ARN=$NLB_LISTENER_ARN" >> $GITHUB_ENV
+        echo "Found NLB DNS: NLB_LISTENER_ARN"
 
     - name: Deploy API Gateway Configuration with NLB
       env:
-        TF_VAR_eks_dns_nlb: ${{ env.NLB_DNS }}
+        TF_VAR_eks_dns_nlb: ${{ env.NLB_LISTENER_ARN }}
       run: |
         terraform init
         terraform apply \

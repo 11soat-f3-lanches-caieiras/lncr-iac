@@ -165,7 +165,7 @@ module "api-gateway-integration" {
   lambda_function_arn = module.lambda.lambda_function_arn
   vpc_subnet_ids      = module.vpc.app_subnet_ids
   security_group_ids  = [module.eks.cluster_security_group_id]
-  eks_dns_nlb         = var.eks_dns_nlb
+  # eks_nlb_listener_arn = module.eks.eks_nlb_listener_arn
 }
 
 #========================================================================================#
