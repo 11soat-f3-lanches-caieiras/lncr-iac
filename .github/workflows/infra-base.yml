@@ -37,7 +37,7 @@ jobs:
     - name: Trigger lncr-app deployment
       uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.REPO_TOKEN}}
         repository: 11soat-f3-lanches-caieiras/lncr-app
         event-type: infra-base-completed
         client-payload: |
