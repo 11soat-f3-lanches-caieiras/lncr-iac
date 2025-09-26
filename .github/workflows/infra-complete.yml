@@ -4,12 +4,16 @@ env:
   TERRAFORM_VERSION: 1.5.7
 
 on:
-  workflow_run:
-    workflows: ["Deploy Application"]  # Nome do workflow do repo app
-    types: [completed]
-
+  repository_dispatch:
+    types: [infra-iac-completed]
   workflow_dispatch:
-
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'develop'
+        type: string
 
 jobs:
   complete-infra:

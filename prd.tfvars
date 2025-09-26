@@ -63,7 +63,7 @@ api_gateway_throttle = {
 #========================================================================================#
 
 ecr_repository_names = ["app"]
-ecr_image_tag_mutability = "IMMUTABLE"
+ecr_image_tag_mutability = "MUTABLE"
 ecr_scan_on_push = true
 
 #========================================================================================#
