@@ -50,8 +50,7 @@ jobs:
 
     - name: Get Function ARN
       run: |
-        FUNCTION_ARN=$(aws lambda get-function --function-name lncr-prd-custom-authorizer --query 'Configuration.FunctionArn' --output text))
-        
+        FUNCTION_ARN=$(aws lambda get-function --function-name lncr-prd-custom-authorizer --query 'Configuration.FunctionArn' --output text)
         echo "FUNCTION_ARN found: $FUNCTION_ARN"
         if [ -z "$FUNCTION_ARN" ]; then
           echo "Error: Function ARN not found"
