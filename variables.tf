@@ -101,6 +101,12 @@ variable "openvpn_instance_type" {
   type        = string
 }
 
+variable "lambda_function_arn" {
+  description = "Lambda function ARN for API Gateway authorizer"
+  type  = string
+  default = "lncr-prd-custom-authorizer"
+}
+
 #========================================================================================#
 #                                EKS VARIABLES                                           #
 #========================================================================================#
