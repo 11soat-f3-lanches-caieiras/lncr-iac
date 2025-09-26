@@ -49,10 +49,8 @@ jobs:
         echo "NLB_LISTENER_ARN=$NLB_LISTENER_ARN" >> $GITHUB_ENV
 
     - name: Get Function ARN
-      env:
-        FUNCTION_NAME: "lncr-prd-custom-authorizer"
       run: |
-        FUNCTION_ARN=$(aws lambda get-function --function-name $FUNCTION_NAME --query 'Configuration.FunctionArn' --output text))
+        FUNCTION_ARN=$(aws lambda get-function --function-name lncr-prd-custom-authorizer --query 'Configuration.FunctionArn' --output text))
         
         echo "FUNCTION_ARN found: $FUNCTION_ARN"
         if [ -z "$FUNCTION_ARN" ]; then
