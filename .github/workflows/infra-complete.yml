@@ -34,7 +34,7 @@ jobs:
       run: |
         aws eks update-kubeconfig --region us-east-1 --name lncr-prd-eks
 
-    - name: Get NLB DNS from EKS
+    - name: Get NLB Listener ARN from EKS
       run: |
         # Buscar DNS do NLB criado pelo Helm
         NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)

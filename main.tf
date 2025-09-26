@@ -156,17 +156,19 @@ module "fsx_openzfs" {
 #                          API GATEWAY INTEGRATION (FASE 3)                            #
 #========================================================================================#
 
-module "api-gateway-integration" {
+module "api-gateway-configuration" {
   source = "./modules/api-gateway-configuration"
 
-  prefix_name         = local.prefix_name
-  environment_name    = local.environment_name
-  api_gateway_api_id  = module.api_gateway.api_id
-  lambda_function_arn = module.lambda.lambda_function_arn
-  vpc_subnet_ids      = module.vpc.app_subnet_ids
-  security_group_ids  = [module.eks.cluster_security_group_id]
-  # eks_nlb_listener_arn = module.eks.eks_nlb_listener_arn
+  prefix_name          = local.prefix_name
+  environment_name     = local.environment_name
+  api_gateway_api_id   = module.api_gateway.api_id
+  lambda_function_arn  = module.lambda.lambda_function_arn
+  vpc_subnet_ids       = module.vpc.app_subnet_ids
+  security_group_ids = [module.eks.cluster_security_group_id]
+  eks_nlb_listener_arn = var.eks_nlb_listener_arn
+
 }
+
 
 #========================================================================================#
 #                                  OUTPUTS                                              #
