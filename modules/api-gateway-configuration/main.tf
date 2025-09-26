@@ -45,6 +45,10 @@ resource "aws_apigatewayv2_route" "secured_route" {
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
   target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
+
+  lifecycle {
+    ignore_changes = [route_key]
+  }
 }
 
 
