@@ -79,7 +79,6 @@ variable "security_group_ids" {
 variable "eks_dns_nlb" {
   description = "DNS name of the NLB for EKS cluster"
   type        = string
-  default     = env("NLB_DNS_NAME")
 }
 
 variable "authorization_routes" {
