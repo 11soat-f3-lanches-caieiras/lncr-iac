@@ -54,7 +54,7 @@ jobs:
       run: |
         terraform init
         terraform apply \
-          -target=module.api-gateway-integration \
+          -target=module.api-gateway-configuration \
           -var="eks_nlb_listener_arn=${{ env.NLB_LISTENER_ARN }}" \
           -var-file="prd.tfvars" \
           -auto-approve
