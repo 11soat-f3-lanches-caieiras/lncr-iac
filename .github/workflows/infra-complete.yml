@@ -39,13 +39,12 @@ jobs:
         # Buscar DNS do NLB criado pelo Helm
         NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a7d6003be804544d88f51624526acb28/bb309064010015fc --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)
         NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
-        echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
         if [ -z "NLB_LISTENER_ARN" ]; then
           echo "Error: NLB DNS not found"
           exit 1
         fi
         echo "NLB_LISTENER_ARN=$NLB_LISTENER_ARN" >> $GITHUB_ENV
-        echo "Found NLB DNS: NLB_LISTENER_ARN"
+        echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
 
     - name: Deploy API Gateway Configuration with NLB
       env:
@@ -54,5 +53,6 @@ jobs:
         terraform init
         terraform apply \
           -target=module.api-gateway-integration \
+          -var="eks_nlb_listener_arn=${{ env.NLB_LISTENER_ARN }}"
           -var-file="prd.tfvars" \
           -auto-approve
