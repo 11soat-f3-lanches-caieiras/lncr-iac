@@ -12,16 +12,11 @@ resource "aws_apigatewayv2_integration" "eks_nlb" {
   api_id                 = var.api_gateway_api_id
   integration_type       = "HTTP_PROXY"
   integration_method     = "ANY"
-  integration_uri        = "http://a8bb7aa1251544eff9c370677ae99f04-94503d6a582a4396.elb.us-east-1.amazonaws.com:8080/{proxy}"
+  integration_uri        = var.eks_nlb_listener_arn
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.eks_vpc_link.id
   payload_format_version = "1.0"
 }
-
-
-#========================================================================================#
-#                                API CUSTOM AUTHORIZER                                   #
-#========================================================================================#
 
 resource "aws_apigatewayv2_authorizer" "lambda_integration" {
   api_id           = var.api_gateway_api_id
