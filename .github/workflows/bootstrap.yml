@@ -5,21 +5,11 @@ env:
 
 on:
   workflow_dispatch:
-    inputs:
-      phase:
-        description: 'Deployment phase'
-        required: true
-        default: 'foundation'
-        type: choice
-        options:
-        - foundation
-        - complete
 
 jobs:
   foundation:
     name: Deploy Foundation (VPC + CodeBuild)
     runs-on: ubuntu-latest
-    if: github.event.inputs.phase == 'foundation'
     
     steps:
     - name: Checkout code
@@ -53,22 +43,3 @@ jobs:
         echo "CodeBuild project created: $(terraform output -raw codebuild_project_name)"
         echo "Update your main workflow to use this CodeBuild project"
 
-  complete:
-    name: Deploy Complete Infrastructure
-    runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
-    if: github.event.inputs.phase == 'complete'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: ${{ env.TERRAFORM_VERSION }}
-
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Deploy Complete Infrastructure
-      run: terraform apply -var-file="prd.tfvars" -auto-approve
