@@ -31,6 +31,7 @@ jobs:
           -target=module.ecr \
           -target=module.secrets_manager \
           -target=module.fsx_openzfs \
+          -target=module.alb_controller \
           -var-file="prd.tfvars" \
           -auto-approve
           
