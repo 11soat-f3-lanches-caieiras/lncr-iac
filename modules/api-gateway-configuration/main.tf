@@ -46,7 +46,7 @@ resource "aws_apigatewayv2_route" "secured_route" {
   }
 }
 
-resource "aws_apigatewayv2_route" "free_route" {
+resource "aws_apigatewayv2_route" "open_route" {
   for_each = toset(var.open_routes)
   api_id    = var.api_gateway_api_id
   route_key = each.value
