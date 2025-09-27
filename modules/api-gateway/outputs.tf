@@ -18,6 +18,16 @@ output "stage_arn" {
   value       = aws_apigatewayv2_stage.default.arn
 }
 
+output "prd_stage_arn" {
+  description = "API Gateway PRD stage ARN"
+  value       = aws_apigatewayv2_stage.prd.arn
+}
+
+output "prd_stage_invoke_url" {
+  description = "API Gateway PRD stage invoke URL"
+  value       = aws_apigatewayv2_stage.prd.invoke_url
+}
+
 output "execution_arn" {
   description = "API Gateway execution ARN"
   value       = aws_apigatewayv2_api.api.execution_arn

@@ -43,6 +43,40 @@ resource "aws_apigatewayv2_stage" "default" {
   }
 }
 
+resource "aws_apigatewayv2_stage" "prd" {
+  api_id      = aws_apigatewayv2_api.api.id
+  name        = "prd"
+  auto_deploy = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_prd.arn
+    format = jsonencode({
+      requestId      = "$context.requestId"
+      ip            = "$context.identity.sourceIp"
+      requestTime   = "$context.requestTime"
+      httpMethod    = "$context.httpMethod"
+      routeKey      = "$context.routeKey"
+      status        = "$context.status"
+      protocol      = "$context.protocol"
+      responseLength = "$context.responseLength"
+      responseTime  = "$context.responseTime"
+      error         = "$context.error.message"
+    })
+  }
+
+  default_route_settings {
+    throttling_burst_limit = var.throttle_settings.burst_limit
+    throttling_rate_limit  = var.throttle_settings.rate_limit
+  }
+
+  tags = {
+    Name        = "${var.prefix_name}-${var.environment_name}-api-prd-stage"
+    Environment = var.environment_name
+    Owner       = "fiap"
+    CostCenter  = "FinOps"
+  }
+}
+
 
 
 #========================================================================================#
@@ -55,6 +89,18 @@ resource "aws_cloudwatch_log_group" "api_gateway" {
 
   tags = {
     Name        = "${var.prefix_name}-${var.environment_name}-api-logs"
+    Environment = var.environment_name
+    Owner       = "fiap"
+    CostCenter  = "FinOps"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "api_gateway_prd" {
+  name              = "/aws/apigateway/${var.prefix_name}-${var.environment_name}-api-prd"
+  retention_in_days = 30
+
+  tags = {
+    Name        = "${var.prefix_name}-${var.environment_name}-api-prd-logs"
     Environment = var.environment_name
     Owner       = "fiap"
     CostCenter  = "FinOps"
