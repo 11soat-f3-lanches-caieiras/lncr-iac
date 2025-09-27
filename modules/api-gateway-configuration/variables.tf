@@ -81,6 +81,14 @@ variable "eks_nlb_listener_arn" {
   type        = string
 }
 
+variable "open_routes" {
+  type    = list(string)
+  default = [
+    "POST /oauth/token",
+    "POST /webhooks/payments/mercadoPago/callback",
+  ]
+}
+
 variable "authorization_routes" {
   type    = list(string)
   default = [

@@ -12,11 +12,11 @@ resource "aws_apigatewayv2_integration" "eks_nlb" {
   api_id                 = var.api_gateway_api_id
   integration_type       = "HTTP_PROXY"
   integration_method     = "ANY"
-  integration_uri        = var.eks_nlb_listener_arn
+  integration_uri        = "http://a8bb7aa1251544eff9c370677ae99f04-94503d6a582a4396.elb.us-east-1.amazonaws.com:8080/{proxy}"
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.eks_vpc_link.id
+  payload_format_version = "1.0"
 }
-
 
 
 #========================================================================================#
@@ -46,11 +46,16 @@ resource "aws_apigatewayv2_route" "secured_route" {
   }
 }
 
-# resource "aws_apigatewayv2_route" "lambda_root_route" {
-#   api_id    = var.api_gateway_api_id
-#   route_key = "ANY /"
-#   target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
-# }
+resource "aws_apigatewayv2_route" "free_route" {
+  for_each = toset(var.open_routes)
+  api_id    = var.api_gateway_api_id
+  route_key = each.value
+  target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
+
+  lifecycle {
+    ignore_changes = [route_key]
+  }
+}
 
 
 
