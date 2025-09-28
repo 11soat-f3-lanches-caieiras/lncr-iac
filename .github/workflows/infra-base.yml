@@ -47,3 +47,15 @@ jobs:
             "branch": "${{ github.ref_name }}",
             "commit": "${{ github.sha }}"
           }
+          
+    - name: Trigger database deployment
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.REPO_TOKEN}}
+        repository: 11soat-f3-lanches-caieiras/lncr-database
+        event-type: infra-base-completed
+        client-payload: |
+          {
+            "branch": "${{ github.ref_name }}",
+            "commit": "${{ github.sha }}"
+          }

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "lncr-fiap-tfstate"
+    bucket = "lncr-soat-tfstate"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
