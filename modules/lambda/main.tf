@@ -9,7 +9,7 @@ data "archive_file" "lambda_zip" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.prefix_name}-${var.environment_name}${var.function_name}"
+  function_name = "${var.prefix_name}-${var.environment_name}-${var.function_name}"
   handler       = var.handler
   runtime       = var.runtime
   role          = aws_iam_role.lambda_execution_role.arn
