@@ -156,6 +156,7 @@ variable "ecr_scan_on_push" {
 variable "codebuild_projects" {
   description = "Map of CodeBuild projects with their configurations"
   type = map(object({
+    codebuild_name = string
     github_repo_url = string
   }))
 }
