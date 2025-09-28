@@ -28,29 +28,7 @@ resource "aws_apigatewayv2_authorizer" "lambda_integration" {
   enable_simple_responses = true
 }
 
-resource "aws_apigatewayv2_route" "secured_route" {
-  for_each = toset(var.authorization_routes)
-  api_id    = var.api_gateway_api_id
-  route_key = each.value
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
-  target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
 
-  lifecycle {
-    ignore_changes = [route_key]
-  }
-}
-
-resource "aws_apigatewayv2_route" "open_route" {
-  for_each = toset(var.open_routes)
-  api_id    = var.api_gateway_api_id
-  route_key = each.value
-  target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
-
-  lifecycle {
-    ignore_changes = [route_key]
-  }
-}
 
 
 
