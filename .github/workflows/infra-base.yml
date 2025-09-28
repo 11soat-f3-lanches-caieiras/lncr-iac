@@ -32,6 +32,7 @@ jobs:
           -target=module.secrets_manager \
           -target=module.fsx_openzfs \
           -target=module.alb_controller \
+          -target=module.openvpn \
           -var-file="prd.tfvars" \
           -auto-approve
           
