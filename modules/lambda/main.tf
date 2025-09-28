@@ -32,7 +32,7 @@ resource "aws_lambda_function" "lambda" {
   depends_on = [data.archive_file.lambda_zip]
 
   lifecycle {
-    ignore_changes = [filename, source_code_hash]
+    ignore_changes = all
   }
 }
 
