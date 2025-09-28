@@ -156,7 +156,7 @@ resource "aws_key_pair" "key-pair-oVpn" {
 #========================================================================================#
 
 resource "aws_s3_bucket" "OpenVPN-bucket" {
-  bucket        = "${var.prefix_name}-openvpn-${var.environment_name}-bucket"
+  bucket        = "${var.prefix_name}-openvpn-${var.environment_name}-bucket-fiap"
   force_destroy = true
 }
 
