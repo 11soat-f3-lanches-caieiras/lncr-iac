@@ -1,7 +1,9 @@
 
 
-resource "aws_codebuild_project" "infra_project" {
-  name         = "github-${var.prefix_name}-iac"
+resource "aws_codebuild_project" "projects" {
+  for_each = var.codebuild_projects
+  
+  name         = each.value.codebuild_name
   service_role = aws_iam_role.codebuild_role.arn
 
   artifacts {
@@ -23,11 +25,11 @@ resource "aws_codebuild_project" "infra_project" {
 
   source {
     type = "GITHUB"
-    location = var.github_repo_url
+    location = each.value.github_repo_url
   }
 
   tags = {
-    Name        = "github-${var.prefix_name}-iac"
+    Name        = each.value.codebuild_name
     Environment = var.environment_name
     Owner       = "Fiap"
     CostCenter  = "FinOps"
@@ -112,7 +114,9 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 }
 
 resource "aws_codebuild_webhook" "github_runner_webhook" {
-  project_name = aws_codebuild_project.infra_project.name
+  for_each = var.codebuild_projects
+  
+  project_name = aws_codebuild_project.projects[each.key].name
   build_type   = "BUILD"
   
   filter_group {

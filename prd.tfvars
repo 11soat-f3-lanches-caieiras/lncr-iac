@@ -70,7 +70,24 @@ ecr_scan_on_push = true
 #                               CODEBUILD VARIABLES                                     #
 #========================================================================================#
 
-codebuild_github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-iac"
+codebuild_projects = {
+  "iac" = {
+    codebuild_name  = "github-lncr-iac"
+    github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-iac"
+  },
+  "database" = {
+    codebuild_name  = "github-lncr-database"
+    github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-database"
+  },
+  "custom-authorizer" = {
+    codebuild_name  = "github-lncr-custom-authorizer"
+    github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-custom-authorizer"
+  },
+  "app" = {
+    codebuild_name  = "github-lncr-app"
+    github_repo_url = "https://github.com/11soat-f3-lanches-caieiras/lncr-app"
+  }
+}
 codebuild_compute_type = "BUILD_GENERAL1_MEDIUM"
 
 #========================================================================================#

@@ -30,10 +30,11 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "github_repo_url" {
-  description = "GitHub repository URL"
-  type        = string
-  default     = ""
+variable "codebuild_projects" {
+  description = "Map of CodeBuild projects with their configurations"
+  type = map(object({
+    github_repo_url = string
+  }))
 }
 
 variable "compute_type" {

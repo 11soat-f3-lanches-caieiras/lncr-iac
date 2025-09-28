@@ -153,10 +153,11 @@ variable "ecr_scan_on_push" {
 #                               CODEBUILD VARIABLES                                     #
 #========================================================================================#
 
-variable "codebuild_github_repo_url" {
-  description = "GitHub repository URL for CodeBuild"
-  type        = string
-  default     = "https://github.com/your-org/lncr-iac"
+variable "codebuild_projects" {
+  description = "Map of CodeBuild projects with their configurations"
+  type = map(object({
+    github_repo_url = string
+  }))
 }
 
 variable "codebuild_compute_type" {

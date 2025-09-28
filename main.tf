@@ -139,7 +139,7 @@ module "codebuild" {
 
   vpc_id         = module.vpc.vpc_id
   subnet_ids     = module.vpc.app_subnet_ids
-  github_repo_url = var.codebuild_github_repo_url
+  codebuild_projects = var.codebuild_projects
   compute_type   = var.codebuild_compute_type
 }
 
@@ -196,9 +196,9 @@ module "api-gateway-configuration" {
 #                                  OUTPUTS                                              #
 #========================================================================================#
 
-output "codebuild_project_name" {
-  description = "CodeBuild project name"
-  value       = module.codebuild.codebuild_project_name
+output "codebuild_project_names" {
+  description = "CodeBuild project names"
+  value       = module.codebuild.codebuild_project_names
 }
 
 output "vpc_id" {
