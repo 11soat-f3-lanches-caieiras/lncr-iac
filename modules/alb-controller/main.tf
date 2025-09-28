@@ -55,34 +55,32 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   timeout    = 600
 
-  set {
-    name  = "clusterName"
-    value = var.cluster_name
-  }
-
-  set {
-    name  = "region"
-    value = var.region
-  }
-
-  set {
-    name  = "serviceAccount.create"
-    value = "false"
-  }
-
-  set {
-    name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
-  }
-
-  set {
-    name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
-    value = aws_iam_role.load_balancer_controller_role.arn
-  }
-  set {
-    name  = "vpcId"
-    value = var.vpc_id
-  }
+  set = [
+    {
+      name  = "clusterName"
+      value = var.cluster_name
+    },
+    {
+      name  = "region"
+      value = var.region
+    },
+    {
+      name  = "serviceAccount.create"
+      value = "false"
+    },
+    {
+      name  = "serviceAccount.name"
+      value = "aws-load-balancer-controller"
+    },
+    {
+      name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
+      value = aws_iam_role.load_balancer_controller_role.arn
+    },
+    {
+      name  = "vpcId"
+      value = var.vpc_id
+    }
+  ]
   values = [
     <<-EOT
     tolerations:
