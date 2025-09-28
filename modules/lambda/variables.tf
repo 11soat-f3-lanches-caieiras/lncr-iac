@@ -23,7 +23,7 @@ variable "environment_name" {
 variable "function_name" {
   description = "Name of the Lambda function"
   type        = string
-  default     = "customer-authorizer"
+  default     = "custom-authorizer"
 }
 
 variable "runtime" {
