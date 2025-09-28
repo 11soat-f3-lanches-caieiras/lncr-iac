@@ -39,7 +39,10 @@ jobs:
     - name: Get NLB Listener ARN from EKS
       run: |
         # Use diretamente o ARN conhecido do NLB
-        NLB_ARN=$(aws elbv2 describe-tags --resource-arns arn:aws:elasticloadbalancing:us-east-1:550939688996:loadbalancer/net/a8bb7aa1251544eff9c370677ae99f04/94503d6a582a4396 --query "TagDescriptions[?Tags[?Key==\`kubernetes.io/cluster/lncr-prd-eks\`]]" --output text | head -1)
+        ARNS_LIST=$(aws elbv2 describe-load-balancers --query "LoadBalancers[].LoadBalancerArn" --output text)
+        echo "ARNS_LIST found: $ARNS_LIST"
+        NLB_ARN=$(aws elbv2 describe-tags --resource-arns $ARNS_LIST --query "TagDescriptions[?Tags[?Key=='kubernetes.io/cluster/lncr-prd-eks']].ResourceArn" --output text | head -1)
+        echo "NLB_ARN found: $NLB_ARN"
         NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
         echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
         if [ -z "$NLB_LISTENER_ARN" ]; then
