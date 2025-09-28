@@ -43,9 +43,9 @@ resource "aws_apigatewayv2_stage" "default" {
   }
 }
 
-resource "aws_apigatewayv2_stage" "prd" {
+resource "aws_apigatewayv2_stage" "v2" {
   api_id      = aws_apigatewayv2_api.api.id
-  name        = "prd"
+  name        = "v2"
   auto_deploy = true
 
   access_log_settings {
@@ -59,7 +59,6 @@ resource "aws_apigatewayv2_stage" "prd" {
       status        = "$context.status"
       protocol      = "$context.protocol"
       responseLength = "$context.responseLength"
-      responseTime  = "$context.responseTime"
       error         = "$context.error.message"
     })
   }
