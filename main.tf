@@ -90,7 +90,7 @@ module "lambda" {
 
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
-  function_name    = "customer-authorizer"
+  function_name    = "custom-authorizer"
 
   environment_variables = {
     ENVIRONMENT = local.environment_name
