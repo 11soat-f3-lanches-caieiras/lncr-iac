@@ -178,7 +178,7 @@ module "fsx_openzfs" {
 #                          API GATEWAY INTEGRATION (FASE 3)                            #
 #========================================================================================#
 
-module "api-gateway-configuration" {
+module "api_gateway_configuration" {
   source = "./modules/api-gateway-configuration"
 
   prefix_name          = local.prefix_name
