@@ -41,7 +41,7 @@ jobs:
         # Use diretamente o ARN conhecido do NLB
         ARNS_LIST=$(aws elbv2 describe-load-balancers --query "LoadBalancers[].LoadBalancerArn" --output text)
         echo "ARNS_LIST found: $ARNS_LIST"
-        NLB_ARN=$(aws elbv2 describe-tags --resource-arns $ARNS_LIST --query "TagDescriptions[?Tags[?Key=='kubernetes.io/cluster/lncr-prd-eks']].ResourceArn" --output text | head -1)
+        NLB_ARN=$(aws elbv2 describe-tags --resource-arns $ARNS_LIST --query "TagDescriptions[?Tags[?Key=='elbv2.k8s.aws/cluster/lncr-prd-eks']].ResourceArn" --output text | head -1)
         echo "NLB_ARN found: $NLB_ARN"
         NLB_LISTENER_ARN=$(aws elbv2 describe-listeners --load-balancer-arn $NLB_ARN --query "Listeners[0].ListenerArn" --output text)
         echo "NLB_LISTENER_ARN found: $NLB_LISTENER_ARN"
