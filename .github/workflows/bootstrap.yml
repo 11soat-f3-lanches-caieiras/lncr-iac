@@ -5,13 +5,6 @@ env:
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to deploy'
-        required: false
-        default: 'develop'
-        type: string
-
 
 jobs:
   foundation:

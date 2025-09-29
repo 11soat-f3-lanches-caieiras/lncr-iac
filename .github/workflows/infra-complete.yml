@@ -19,20 +19,8 @@ on:
   repository_dispatch:
     types: [infra-iac-completed]
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to deploy'
-        required: false
-        default: 'develop'
-        type: string
 
   workflow_call:
-    inputs:
-      branch:
-        description: 'Branch to deploy'
-        required: false
-        default: 'develop'
-        type: string
 
 jobs:
   complete-infra:
