@@ -46,7 +46,7 @@ jobs:
           -target=module.ecr \
           -target=module.secrets_manager \
           -target=module.fsx_openzfs \
-          -target=module.alb_controller \
+#          -target=module.alb_controller \
           -target=module.openvpn \
           -target=module.lambda \
           -var-file="prd.tfvars" \
