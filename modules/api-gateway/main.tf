@@ -49,11 +49,6 @@ resource "aws_apigatewayv2_stage" "default" {
     })
   }
 
-  default_route_settings {
-    throttling_burst_limit = var.throttle_settings.burst_limit
-    throttling_rate_limit  = var.throttle_settings.rate_limit
-  }
-
   tags = {
     Name        = "${var.prefix_name}-${var.environment_name}-api-stage"
     Environment = var.environment_name
