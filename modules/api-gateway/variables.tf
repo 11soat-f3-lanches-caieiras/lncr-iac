@@ -16,10 +16,12 @@ variable "environment_name" {
   }
 }
 
-variable "defaul_region" {
+variable "default_region" {
   type  = string
   default = "us-east-1"
 }
+
+
 
 
 
@@ -47,6 +49,76 @@ variable "throttle_settings" {
     rate_limit  = optional(number, 10000)
   })
   default = {}
+}
+
+variable "lambda_function_arn" {
+  description = "Lambda function ARN for API Gateway authorizer"
+  type  = string
+}
+
+variable "vpc_subnet_ids" {
+  description = "List of VPC subnet IDs for API Gateway VPC Link"
+  type        = list(string)
+}
+
+variable "security_group_ids" {
+  description = "List of security group IDs for API Gateway VPC Link"
+  type        = list(string)
+  default     = []
+}
+
+variable "eks_nlb_listener_arn" {
+  description = "arn of the EKS NLB listener for API Gateway integration"
+  type        = string
+}
+
+variable "open_routes" {
+  type    = list(string)
+  default = [
+    "POST /oauth/token",
+    "POST /webhooks/payments/mercadoPago/callback",
+  ]
+}
+
+variable "authorization_routes" {
+  type    = list(string)
+  default = [
+    "POST /customers",
+    "GET /customers",
+    "GET /customer/{customerId}",
+    "PATCH /customer/{customerId}",
+    "DELETE /customer/{customerId}",
+    "GET /customer/listIds/{customerIdList}",
+    "GET /customer/documentNumber/{documentNumber}",
+    "PATCH /customer/documentNumber/{documentNumber}",
+    "POST /customerOrders",
+    "GET /customerOrder/{customerOrderId}",
+    "GET /customerOrders/status/{statusList}",
+    "PATCH /customerOrder/{customerOrderId}/updateStatus/{newStatus}",
+    "POST /foodItems",
+    "GET /foodItems",
+    "GET /foodItems/{foodItemId}",
+    "PATCH /foodItems/{foodItemId}",
+    "DELETE /foodItems/{foodItemId}",
+    "POST /foodItems/{foodItemId}/images",
+    "GET /foodItems/{foodItemId}/images",
+    "DELETE /foodItems/{foodItemId}/images",
+    "GET /foodItems/image/{foodItemImageId}",
+    "PUT /foodItems/image/{foodItemImageId}",
+    "DELETE /foodItems/image/{foodItemImageId}",
+    "POST /kitchenOrders",
+    "GET /kitchenOrders",
+    "GET /kitchenOrders/{kitchenOrderId}",
+    "GET /kitchenOrders/status/{statusList}",
+    "GET /kitchenOrders/customerOrder/{customerOrderId}",
+    "PATCH /kitchenOrders/{kitchenOrderId}/updateStatus/{newStatus}",
+    "GET /notifications",
+    "GET /notifications/{notificationType}",
+    "POST /payments/mercadoPago/charge",
+    "PATCH /payments/mercadoPago/paymentReceived",
+    "GET /payments/mercadoPago/{customerOrderId}/get",
+    "PATCH /payments/mercadoPago/{customerOrderId}/cancel"
+  ]
 }
 
 

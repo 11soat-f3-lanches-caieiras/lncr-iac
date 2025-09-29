@@ -67,7 +67,7 @@ jobs:
       run: |
         terraform init
         terraform apply \
-          -target=module.api_gateway_configuration \
+          -target=module.api_gateway \
           -var="eks_nlb_listener_arn=${{ env.NLB_LISTENER_ARN }}" \
           -var="lambda_function_arn=${{ env.FUNCTION_ARN }}" \
           -var-file="prd.tfvars" \

@@ -59,28 +59,6 @@ module "eks" {
   instance_type_node_eks         = var.instance_type_node_eks
 }
 
-# ========================================================================================#
-#                              ALB CONTROLLER MODULE                                    #
-# ========================================================================================#
-
-module "alb_controller" {
-  source = "./modules/alb-controller"
-
-  cluster_name                        = module.eks.cluster_name
-  region                             = "us-east-1"
-  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
-  cluster_endpoint                   = module.eks.cluster_endpoint
-  vpc_id                            = module.vpc.vpc_id
-  alb_name                          = "${local.prefix_name}-${local.environment_name}-alb"
-  oidc_provider                     = module.eks.oidc_provider_arn
-  group_name                        = "${local.prefix_name}-${local.environment_name}"
-  namespace                         = "kube-system"
-  alb-sg                           = module.eks.cluster_security_group_id
-  public_subnets                   = module.vpc.public_subnet_ids
-
-  depends_on = [module.eks]
-}
-
 #========================================================================================#
 #                                LAMBDA MODULE                                          #
 #========================================================================================#
@@ -110,6 +88,12 @@ module "api_gateway" {
 
   cors_configuration = var.api_gateway_cors
   throttle_settings  = var.api_gateway_throttle
+
+  lambda_function_arn  = var.lambda_function_arn
+  vpc_subnet_ids       = module.vpc.app_subnet_ids
+  security_group_ids = [module.eks.cluster_security_group_id]
+  eks_nlb_listener_arn = var.eks_nlb_listener_arn
+
 }
 
 #========================================================================================#
@@ -173,24 +157,6 @@ module "fsx_openzfs" {
   deployment_type                = var.fsx_deployment_type
   automatic_backup_retention_days = var.fsx_backup_retention_days
 }
-
-#========================================================================================#
-#                          API GATEWAY INTEGRATION (FASE 3)                            #
-#========================================================================================#
-
-module "api_gateway_configuration" {
-  source = "./modules/api-gateway-configuration"
-
-  prefix_name          = local.prefix_name
-  environment_name     = local.environment_name
-  api_gateway_api_id   = module.api_gateway.api_id
-  lambda_function_arn  = var.lambda_function_arn
-  vpc_subnet_ids       = module.vpc.app_subnet_ids
-  security_group_ids = [module.eks.cluster_security_group_id]
-  eks_nlb_listener_arn = var.eks_nlb_listener_arn
-
-}
-
 
 #========================================================================================#
 #                                  OUTPUTS                                              #

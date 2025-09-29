@@ -5,8 +5,7 @@
 resource "aws_apigatewayv2_api" "api" {
   name          = "${var.prefix_name}-${var.environment_name}-api"
   protocol_type = "HTTP"
-  body          = file("${path.module}/lncr-prd-api.yaml")
-
+  description   = "API Gateway HTTP v2 for ${var.prefix_name} ${var.environment_name}"
 
   cors_configuration {
     allow_credentials = var.cors_configuration.allow_credentials
@@ -35,19 +34,6 @@ resource "aws_apigatewayv2_stage" "default" {
     throttling_rate_limit  = var.throttle_settings.rate_limit
   }
 
-  tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api-stage"
-    Environment = var.environment_name
-    Owner       = "fiap"
-    CostCenter  = "FinOps"
-  }
-}
-
-resource "aws_apigatewayv2_stage" "v2" {
-  api_id      = aws_apigatewayv2_api.api.id
-  name        = "v2"
-  auto_deploy = true
-
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gateway_prd.arn
     format = jsonencode({
@@ -69,14 +55,68 @@ resource "aws_apigatewayv2_stage" "v2" {
   }
 
   tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api-prd-stage"
+    Name        = "${var.prefix_name}-${var.environment_name}-api-stage"
     Environment = var.environment_name
     Owner       = "fiap"
     CostCenter  = "FinOps"
   }
+
 }
 
+#========================================================================================#
+#                          API INTEGRATION AND AUTHORIZATION                             #
+#========================================================================================#
 
+
+resource "aws_apigatewayv2_vpc_link" "eks_vpc_link" {
+  name               = "eks-vpc-link"
+  subnet_ids         = var.vpc_subnet_ids
+  security_group_ids = var.security_group_ids
+}
+
+resource "aws_apigatewayv2_integration" "eks_nlb" {
+  api_id                 = aws_apigatewayv2_api.api.id
+  integration_type       = "HTTP_PROXY"
+  integration_method     = "ANY"
+  integration_uri        = var.eks_nlb_listener_arn
+  connection_type        = "VPC_LINK"
+  connection_id          = aws_apigatewayv2_vpc_link.eks_vpc_link.id
+  payload_format_version = "1.0"
+}
+
+resource "aws_apigatewayv2_authorizer" "lambda_integration" {
+  api_id           = aws_apigatewayv2_api.api.id
+  authorizer_type  = "REQUEST"
+  authorizer_uri   = "arn:aws:apigateway:${var.default_region}:lambda:path/2015-03-31/functions/${var.lambda_function_arn}/invocations"
+  identity_sources = ["$request.header.Authorization"]
+  name             = "${var.prefix_name}-${var.environment_name}-api-custom-authorizer"
+  authorizer_payload_format_version = "2.0"
+  enable_simple_responses = true
+}
+
+resource "aws_apigatewayv2_route" "secured_route" {
+  for_each = toset(var.authorization_routes)
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = each.value
+  authorization_type = "CUSTOM"
+  authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
+  target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
+
+  lifecycle {
+    ignore_changes = [route_key]
+  }
+}
+
+resource "aws_apigatewayv2_route" "open_route" {
+  for_each = toset(var.open_routes)
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = each.value
+  target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
+
+  lifecycle {
+    ignore_changes = [route_key]
+  }
+}
 
 #========================================================================================#
 #                                  CLOUDWATCH LOGS                                      #
