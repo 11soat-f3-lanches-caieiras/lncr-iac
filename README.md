@@ -1,3 +1,5 @@
+[![Infra Base](https://github.com/11soat-f3-lanches-caieiras/lncr-iac/actions/workflows/infra-base.yml/badge.svg?branch=develop)](https://github.com/11soat-f3-lanches-caieiras/lncr-iac/actions/workflows/infra-base.yml)
+
 # LNCR Infrastructure as Code (IaC)
 
 Este repositório contém módulos Terraform para implantação de uma solução completa de infraestrutura em nuvem incluindo VPC, OpenVPN, cluster EKS e API Gateway na AWS.
