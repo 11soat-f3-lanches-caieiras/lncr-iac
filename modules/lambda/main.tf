@@ -8,7 +8,19 @@ data "archive_file" "lambda_zip" {
   source_file = "${path.module}/templates/placeholder.js"
 }
 
+data "aws_lambda_function" "existing" {
+  function_name = var.function_name
+
+  lifecycle {
+    postcondition {
+      condition = can(self.function_name)
+      error_message = "Lambda function does not exist"
+    }
+  }
+}
+
 resource "aws_lambda_function" "lambda" {
+  count = try(data.aws_lambda_function.existing.function_name, null) == null ? 1 : 0
   function_name = "${var.prefix_name}-${var.environment_name}-${var.function_name}"
   handler       = var.handler
   runtime       = var.runtime

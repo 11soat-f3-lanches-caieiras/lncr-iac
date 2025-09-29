@@ -25,6 +25,11 @@ resource "aws_iam_role_policy_attachment" "load_balancer_controller_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "load_balancer_controller_policy_elb_fullaccess" {
+  role       = aws_iam_role.load_balancer_controller_role.name
+  policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
+}
+
 resource "aws_iam_role_policy" "load_balancer_controller_additional" {
   name = "eks-load-balancer-controller-additional"
   role = aws_iam_role.load_balancer_controller_role.id
