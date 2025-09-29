@@ -6,13 +6,33 @@ env:
 on:
   push:
     branches: [ develop ]
+    paths:
+      - modules/ecr/**
+      - modules/eks/**
+      - modules/secrets_manager/**
+      - modules/fsx_openzfs/**
+      - modules/openvpn/**
+      - modules/lambda/**
+      - prd.tfvars
+      - .github/workflows/infra-base.yml
+      - locals.tf
+      - main.tf
+      - outputs.tf
+      - providers.tf
+      - variables.tf
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'develop'
+        type: string
+
 
 jobs:
   deploy-base:
     name: Deploy Base Infrastructure
     runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -51,6 +71,7 @@ jobs:
           
     - name: Trigger database deployment
       uses: peter-evans/repository-dispatch@v2
+      if: github.event_name == 'workflow_dispatch'
       with:
         token: ${{ secrets.REPO_TOKEN}}
         repository: 11soat-f3-lanches-caieiras/lncr-database
@@ -63,6 +84,7 @@ jobs:
           
     - name: Trigger custom-authorizer deployment
       uses: peter-evans/repository-dispatch@v2
+      if: github.event_name == 'workflow_dispatch'
       with:
         token: ${{ secrets.REPO_TOKEN}}
         repository: 11soat-f3-lanches-caieiras/lncr-custom-authorizer

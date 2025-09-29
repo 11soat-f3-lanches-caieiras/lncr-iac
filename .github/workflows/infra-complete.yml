@@ -4,9 +4,28 @@ env:
   TERRAFORM_VERSION: 1.5.7
 
 on:
+  push:
+    branches: [ develop ]
+    paths:
+      - modules/api_gateway/**
+      - prd.tfvars
+      - .github/workflows/infra-complete.yml
+      - locals.tf
+      - main.tf
+      - outputs.tf
+      - providers.tf
+      - variables.tf
+
   repository_dispatch:
     types: [infra-iac-completed]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'develop'
+        type: string
+
   workflow_call:
     inputs:
       branch:
@@ -19,8 +38,8 @@ jobs:
   complete-infra:
     name: Complete Infrastructure Setup
     runs-on: codebuild-github-lncr-iac-${{ github.run_id }}-${{ github.run_attempt }}
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -53,6 +72,7 @@ jobs:
 
     - name: Get Function ARN
       run: |
+        
         FUNCTION_ARN=$(aws lambda get-function --function-name lncr-prd-custom-authorizer --query 'Configuration.FunctionArn' --output text)
         echo "FUNCTION_ARN found: $FUNCTION_ARN"
         if [ -z "$FUNCTION_ARN" ]; then
