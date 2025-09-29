@@ -59,6 +59,28 @@ module "eks" {
   instance_type_node_eks         = var.instance_type_node_eks
 }
 
+# ========================================================================================#
+#                              ALB CONTROLLER MODULE                                    #
+# ========================================================================================#
+
+module "alb_controller" {
+  source = "./modules/alb-controller"
+
+  cluster_name                        = module.eks.cluster_name
+  region                             = "us-east-1"
+  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+  cluster_endpoint                   = module.eks.cluster_endpoint
+  vpc_id                            = module.vpc.vpc_id
+  alb_name                          = "${local.prefix_name}-${local.environment_name}-alb"
+  oidc_provider                     = module.eks.oidc_provider_arn
+  group_name                        = "${local.prefix_name}-${local.environment_name}"
+  namespace                         = "kube-system"
+  alb-sg                           = module.eks.cluster_security_group_id
+  public_subnets                   = module.vpc.public_subnet_ids
+
+  depends_on = [module.eks]
+}
+
 #========================================================================================#
 #                                LAMBDA MODULE                                          #
 #========================================================================================#
