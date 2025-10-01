@@ -100,10 +100,7 @@ resource "kubectl_manifest" "load_balancer_namespace" {
   yaml_body = data.template_file.load_balancer_namespace.rendered
 }
 
-resource "kubectl_manifest" "load_balancer_controller_sa" {
-  yaml_body = data.template_file.load_balancer_controller_sa.rendered
 
-}
 
 resource "kubectl_manifest" "default_ingress" {
   yaml_body  = data.template_file.default_ingress.rendered

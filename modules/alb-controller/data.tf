@@ -5,8 +5,6 @@ data "template_file" "load_balancer_namespace" {
   template = file("${path.module}/templates/namespace.yaml")
 }
 
-
-
 data "template_file" "default_ingress" {
   template = file("${path.module}/templates/default-ingress.yaml")
 
