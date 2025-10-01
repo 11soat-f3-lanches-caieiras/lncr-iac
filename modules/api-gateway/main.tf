@@ -13,7 +13,7 @@ resource "aws_apigatewayv2_api" "api" {
     allow_methods     = var.cors_configuration.allow_methods
     allow_origins     = var.cors_configuration.allow_origins
     expose_headers    = var.cors_configuration.expose_headers
-    max_age          = var.cors_configuration.max_age
+    max_age           = var.cors_configuration.max_age
   }
 
   tags = {
@@ -38,14 +38,14 @@ resource "aws_apigatewayv2_stage" "default" {
     destination_arn = aws_cloudwatch_log_group.api_gateway_prd.arn
     format = jsonencode({
       requestId      = "$context.requestId"
-      ip            = "$context.identity.sourceIp"
-      requestTime   = "$context.requestTime"
-      httpMethod    = "$context.httpMethod"
-      routeKey      = "$context.routeKey"
-      status        = "$context.status"
-      protocol      = "$context.protocol"
+      ip             = "$context.identity.sourceIp"
+      requestTime    = "$context.requestTime"
+      httpMethod     = "$context.httpMethod"
+      routeKey       = "$context.routeKey"
+      status         = "$context.status"
+      protocol       = "$context.protocol"
       responseLength = "$context.responseLength"
-      error         = "$context.error.message"
+      error          = "$context.error.message"
     })
   }
 
@@ -80,19 +80,19 @@ resource "aws_apigatewayv2_integration" "eks_nlb" {
 }
 
 resource "aws_apigatewayv2_authorizer" "lambda_integration" {
-  api_id           = aws_apigatewayv2_api.api.id
-  authorizer_type  = "REQUEST"
-  authorizer_uri   = "arn:aws:apigateway:${var.default_region}:lambda:path/2015-03-31/functions/${var.lambda_function_arn}/invocations"
-  identity_sources = ["$request.header.Authorization"]
-  name             = "${var.prefix_name}-${var.environment_name}-api-custom-authorizer"
+  api_id                            = aws_apigatewayv2_api.api.id
+  authorizer_type                   = "REQUEST"
+  authorizer_uri                    = "arn:aws:apigateway:${var.default_region}:lambda:path/2015-03-31/functions/${var.lambda_function_arn}/invocations"
+  identity_sources                  = ["$request.header.Authorization"]
+  name                              = "${var.prefix_name}-${var.environment_name}-api-custom-authorizer"
   authorizer_payload_format_version = "2.0"
-  enable_simple_responses = true
+  enable_simple_responses           = true
 }
 
 resource "aws_apigatewayv2_route" "secured_route" {
-  for_each = toset(var.authorization_routes)
-  api_id    = aws_apigatewayv2_api.api.id
-  route_key = each.value
+  for_each           = toset(var.authorization_routes)
+  api_id             = aws_apigatewayv2_api.api.id
+  route_key          = each.value
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
   target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
@@ -103,7 +103,7 @@ resource "aws_apigatewayv2_route" "secured_route" {
 }
 
 resource "aws_apigatewayv2_route" "open_route" {
-  for_each = toset(var.open_routes)
+  for_each  = toset(var.open_routes)
   api_id    = aws_apigatewayv2_api.api.id
   route_key = each.value
   target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"

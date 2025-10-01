@@ -66,7 +66,7 @@ variable "api_gateway_cors" {
     allow_methods     = optional(list(string), ["*"])
     allow_origins     = optional(list(string), ["*"])
     expose_headers    = optional(list(string), [])
-    max_age          = optional(number, 86400)
+    max_age           = optional(number, 86400)
   })
   default = {}
 }
@@ -88,7 +88,7 @@ variable "api_gateway_throttle" {
 variable "eks_nlb_listener_arn" {
   description = "arn of the EKS NLB listener for API Gateway integration"
   type        = string
-  default = ""
+  default     = ""
 }
 
 
@@ -104,8 +104,8 @@ variable "openvpn_instance_type" {
 
 variable "lambda_function_arn" {
   description = "Lambda function ARN for API Gateway authorizer"
-  type  = string
-  default = "lncr-prd-custom-authorizer"
+  type        = string
+  default     = "lncr-prd-custom-authorizer"
 }
 
 #========================================================================================#
@@ -156,7 +156,7 @@ variable "ecr_scan_on_push" {
 variable "codebuild_projects" {
   description = "Map of CodeBuild projects with their configurations"
   type = map(object({
-    codebuild_name = string
+    codebuild_name  = string
     github_repo_url = string
   }))
 }

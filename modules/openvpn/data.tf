@@ -38,7 +38,7 @@ data "template_file" "user_data" {
   vars = {
     admin_username = random_string.openvpn_admin_user.result
     admin_password = random_password.openvpn_admin_password.result
-    prefix_name  = var.prefix_name
+    prefix_name    = var.prefix_name
   }
 }
 

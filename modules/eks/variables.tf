@@ -1,7 +1,7 @@
 variable "prefix_name" {
   type        = string
   description = "Prefix name for resources"
-  
+
 }
 
 variable "environment" {

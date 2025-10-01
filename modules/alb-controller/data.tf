@@ -7,7 +7,7 @@ data "template_file" "load_balancer_namespace" {
 
 data "template_file" "load_balancer_controller_sa" {
   template = file("${path.module}/templates/service-account.yaml")
-  
+
   vars = {
     role_arn = aws_iam_role.load_balancer_controller_role.arn
   }

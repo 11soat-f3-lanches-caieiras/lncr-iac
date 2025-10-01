@@ -17,7 +17,7 @@ variable "environment_name" {
 }
 
 variable "default_region" {
-  type  = string
+  type    = string
   default = "us-east-1"
 }
 
@@ -37,7 +37,7 @@ variable "cors_configuration" {
     allow_methods     = optional(list(string), ["*"])
     allow_origins     = optional(list(string), ["*"])
     expose_headers    = optional(list(string), [])
-    max_age          = optional(number, 86400)
+    max_age           = optional(number, 86400)
   })
   default = {}
 }
@@ -53,7 +53,7 @@ variable "throttle_settings" {
 
 variable "lambda_function_arn" {
   description = "Lambda function ARN for API Gateway authorizer"
-  type  = string
+  type        = string
 }
 
 variable "vpc_subnet_ids" {
@@ -73,7 +73,7 @@ variable "eks_nlb_listener_arn" {
 }
 
 variable "open_routes" {
-  type    = list(string)
+  type = list(string)
   default = [
     "POST /oauth/token",
     "POST /webhooks/payments/mercadoPago/callback",
@@ -81,7 +81,7 @@ variable "open_routes" {
 }
 
 variable "authorization_routes" {
-  type    = list(string)
+  type = list(string)
   default = [
     "POST /customers",
     "GET /customers",

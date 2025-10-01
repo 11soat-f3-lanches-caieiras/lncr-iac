@@ -66,17 +66,17 @@ module "eks" {
 module "alb_controller" {
   source = "./modules/alb-controller"
 
-  cluster_name                        = module.eks.cluster_name
+  cluster_name                       = module.eks.cluster_name
   region                             = "us-east-1"
   cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
   cluster_endpoint                   = module.eks.cluster_endpoint
-  vpc_id                            = module.vpc.vpc_id
-  alb_name                          = "${local.prefix_name}-${local.environment_name}-alb"
-  oidc_provider                     = module.eks.oidc_provider_arn
-  group_name                        = "${local.prefix_name}-${local.environment_name}"
-  namespace                         = "kube-system"
-  alb-sg                           = module.eks.cluster_security_group_id
-  public_subnets                   = module.vpc.public_subnet_ids
+  vpc_id                             = module.vpc.vpc_id
+  alb_name                           = "${local.prefix_name}-${local.environment_name}-alb"
+  oidc_provider                      = module.eks.oidc_provider_arn
+  group_name                         = "${local.prefix_name}-${local.environment_name}"
+  namespace                          = "kube-system"
+  alb-sg                             = module.eks.cluster_security_group_id
+  public_subnets                     = module.vpc.public_subnet_ids
 
   depends_on = [module.eks]
 }
@@ -113,7 +113,7 @@ module "api_gateway" {
 
   lambda_function_arn  = var.lambda_function_arn
   vpc_subnet_ids       = module.vpc.app_subnet_ids
-  security_group_ids = [module.eks.cluster_security_group_id]
+  security_group_ids   = [module.eks.cluster_security_group_id]
   eks_nlb_listener_arn = var.eks_nlb_listener_arn
 
 }
@@ -128,7 +128,7 @@ module "ecr" {
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
 
-  repository_names      = var.ecr_repository_names
+  repository_names     = var.ecr_repository_names
   image_tag_mutability = var.ecr_image_tag_mutability
   scan_on_push         = var.ecr_scan_on_push
 }
@@ -143,10 +143,10 @@ module "codebuild" {
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
 
-  vpc_id         = module.vpc.vpc_id
-  subnet_ids     = module.vpc.app_subnet_ids
+  vpc_id             = module.vpc.vpc_id
+  subnet_ids         = module.vpc.app_subnet_ids
   codebuild_projects = var.codebuild_projects
-  compute_type   = var.codebuild_compute_type
+  compute_type       = var.codebuild_compute_type
 }
 
 #========================================================================================#
@@ -172,11 +172,11 @@ module "fsx_openzfs" {
   prefix_name      = local.prefix_name
   environment_name = local.environment_name
 
-  vpc_id                         = module.vpc.vpc_id
+  vpc_id                          = module.vpc.vpc_id
   subnet_ids                      = [module.vpc.app_subnet_ids[0]]
-  storage_capacity               = var.fsx_storage_capacity
-  throughput_capacity            = var.fsx_throughput_capacity
-  deployment_type                = var.fsx_deployment_type
+  storage_capacity                = var.fsx_storage_capacity
+  throughput_capacity             = var.fsx_throughput_capacity
+  deployment_type                 = var.fsx_deployment_type
   automatic_backup_retention_days = var.fsx_backup_retention_days
 }
 

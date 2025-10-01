@@ -30,8 +30,8 @@ module "flow_logs" {
   source = "./modules/flow-logs"
 
   prefix_name = var.prefix_name
-  environment   = var.environment
-  vpc_id        = aws_vpc.vpc.id
+  environment = var.environment
+  vpc_id      = aws_vpc.vpc.id
 }
 
 ################################################################################

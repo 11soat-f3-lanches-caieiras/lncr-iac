@@ -50,7 +50,7 @@ api_gateway_cors = {
   allow_headers     = ["content-type", "x-amz-date", "authorization", "x-api-key"]
   allow_methods     = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   allow_origins     = ["*"]
-  max_age          = 86400
+  max_age           = 86400
 }
 
 api_gateway_throttle = {
@@ -62,9 +62,9 @@ api_gateway_throttle = {
 #                                ECR VARIABLES                                          #
 #========================================================================================#
 
-ecr_repository_names = ["app"]
+ecr_repository_names     = ["app"]
 ecr_image_tag_mutability = "MUTABLE"
-ecr_scan_on_push = true
+ecr_scan_on_push         = true
 
 #========================================================================================#
 #                               CODEBUILD VARIABLES                                     #
@@ -100,7 +100,7 @@ secrets_manager_recovery_window = 7
 #                               FSX OPENZFS VARIABLES                                   #
 #========================================================================================#
 
-fsx_storage_capacity = 64
-fsx_throughput_capacity = 64
-fsx_deployment_type = "SINGLE_AZ_1"
+fsx_storage_capacity      = 64
+fsx_throughput_capacity   = 64
+fsx_deployment_type       = "SINGLE_AZ_1"
 fsx_backup_retention_days = 7

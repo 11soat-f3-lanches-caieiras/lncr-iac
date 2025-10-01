@@ -30,22 +30,22 @@ output "stage_id" {
 
 output "eks_vpc_link_id" {
   description = "EKS VPC Link ID"
-  value = aws_apigatewayv2_vpc_link.eks_vpc_link.id
+  value       = aws_apigatewayv2_vpc_link.eks_vpc_link.id
 }
 
 output "eks_vpc_link_arn" {
   description = "EKS VPC Link ARN"
-  value = aws_apigatewayv2_vpc_link.eks_vpc_link.id
+  value       = aws_apigatewayv2_vpc_link.eks_vpc_link.id
 }
 
 output "eks_nlb_id" {
   description = "EKS NLB Integration ID"
-  value = aws_apigatewayv2_integration.eks_nlb.id
+  value       = aws_apigatewayv2_integration.eks_nlb.id
 }
 
 output "lambda_authorizer_id" {
   description = "Lambda Authorizer ID"
-  value = aws_apigatewayv2_authorizer.lambda_integration.id
+  value       = aws_apigatewayv2_authorizer.lambda_integration.id
 }
 
 output "secured_routes_list" {

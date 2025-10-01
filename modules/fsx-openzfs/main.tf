@@ -9,8 +9,8 @@ resource "aws_fsx_openzfs_file_system" "main" {
   throughput_capacity             = var.throughput_capacity
   security_group_ids              = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.fsx_sg[0].id]
   automatic_backup_retention_days = var.automatic_backup_retention_days
-  copy_tags_to_backups           = var.copy_tags_to_backups
-  copy_tags_to_volumes           = var.copy_tags_to_volumes
+  copy_tags_to_backups            = var.copy_tags_to_backups
+  copy_tags_to_volumes            = var.copy_tags_to_volumes
 
   root_volume_configuration {
     nfs_exports {

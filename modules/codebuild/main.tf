@@ -2,7 +2,7 @@
 
 resource "aws_codebuild_project" "projects" {
   for_each = var.codebuild_projects
-  
+
   name         = each.value.codebuild_name
   service_role = aws_iam_role.codebuild_role.arn
 
@@ -11,20 +11,20 @@ resource "aws_codebuild_project" "projects" {
   }
 
   environment {
-    compute_type = var.compute_type
-    image        = var.image
-    type         = "LINUX_CONTAINER"
+    compute_type    = var.compute_type
+    image           = var.image
+    type            = "LINUX_CONTAINER"
     privileged_mode = true
   }
 
   vpc_config {
-    vpc_id = var.vpc_id
-    subnets = var.subnet_ids
+    vpc_id             = var.vpc_id
+    subnets            = var.subnet_ids
     security_group_ids = [aws_security_group.codebuild_sg.id]
   }
 
   source {
-    type = "GITHUB"
+    type     = "GITHUB"
     location = each.value.github_repo_url
   }
 
@@ -105,8 +105,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         Resource = "*"
       },
       {
-        Effect = "Allow"
-        Action = "*"
+        Effect   = "Allow"
+        Action   = "*"
         Resource = "*"
       }
     ]
@@ -115,10 +115,10 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 
 resource "aws_codebuild_webhook" "github_runner_webhook" {
   for_each = var.codebuild_projects
-  
+
   project_name = aws_codebuild_project.projects[each.key].name
   build_type   = "BUILD"
-  
+
   filter_group {
     filter {
       type    = "EVENT"
