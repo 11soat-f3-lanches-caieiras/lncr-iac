@@ -64,7 +64,7 @@ module "eks" {
 # ========================================================================================#
 
 module "alb_controller" {
-  source = "./modules/alb-controller"
+  source = "./modules/alb-controller/"
 
   cluster_name                       = module.eks.cluster_name
   region                             = "us-east-1"
