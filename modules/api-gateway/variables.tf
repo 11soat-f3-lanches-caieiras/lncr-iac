@@ -116,8 +116,8 @@ variable "authorization_routes" {
     "GET /notifications/{notificationType}",
     "POST /payments/mercadoPago/charge",
     "PATCH /payments/mercadoPago/paymentReceived",
-    "GET /payments/mercadoPago/{customerOrderId}/get",
-    "PATCH /payments/mercadoPago/{customerOrderId}/cancel"
+    "GET /payments/mercadoPago/customerOrder/{customerOrderId}/get",
+    "PATCH /payments/mercadoPago/customerOrder/{customerOrderId}/cancel"
   ]
 }
 
