@@ -25,6 +25,11 @@ resource "aws_iam_role_policy_attachment" "load_balancer_controller_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "load_balancer_controller_policy_elb_fullaccess" {
+  role       = aws_iam_role.load_balancer_controller_role.name
+  policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
+}
+
 resource "aws_iam_role_policy" "load_balancer_controller_additional" {
   name = "eks-load-balancer-controller-additional"
   role = aws_iam_role.load_balancer_controller_role.id
@@ -55,16 +60,34 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   timeout    = 600
 
+  set = [
+    {
+      name  = "clusterName"
+      value = var.cluster_name
+    },
+    {
+      name  = "region"
+      value = var.region
+    },
+    {
+      name  = "serviceAccount.create"
+      value = "true"
+    },
+    {
+      name  = "serviceAccount.name"
+      value = "aws-load-balancer-controller"
+    },
+    {
+      name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
+      value = aws_iam_role.load_balancer_controller_role.arn
+    },
+    {
+      name  = "vpcId"
+      value = var.vpc_id
+    }
+  ]
   values = [
     <<-EOT
-    clusterName: ${var.cluster_name}
-    region: ${var.region}
-    vpcId: ${var.vpc_id}
-    serviceAccount:
-      create: false
-      name: aws-load-balancer-controller
-      annotations:
-        eks.amazonaws.com/role-arn: ${aws_iam_role.load_balancer_controller_role.arn}
     tolerations:
       - key: "CriticalAddonsOnly"
         operator: "Exists"
@@ -77,11 +100,10 @@ resource "kubectl_manifest" "load_balancer_namespace" {
   yaml_body = data.template_file.load_balancer_namespace.rendered
 }
 
-resource "kubectl_manifest" "load_balancer_controller_sa" {
-  yaml_body = data.template_file.load_balancer_controller_sa.rendered
-}
+
 
 resource "kubectl_manifest" "default_ingress" {
   yaml_body  = data.template_file.default_ingress.rendered
   depends_on = [helm_release.aws_load_balancer_controller]
 }
+
