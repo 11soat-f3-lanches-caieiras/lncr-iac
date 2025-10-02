@@ -4,6 +4,8 @@
 
 Este repositório contém a infraestrutura completa como código para o projeto LNCR (Lanches Caieiras), implementando uma arquitetura moderna e escalável na AWS usando Terraform. A solução inclui VPC, EKS, OpenVPN, API Gateway, ECR, CodeBuild e outros serviços essenciais.
 
+> **📚 Contexto Acadêmico**: Este repositório faz parte dos entregáveis do trabalho da **Fase 3** do curso de **Pós-graduação em Software Architecture** da **FIAP**, demonstrando a aplicação prática de conceitos de arquitetura de software, infraestrutura como código e DevOps em um ambiente cloud-native.
+
 ## 📋 Índice
 
 - [Visão Geral da Arquitetura](#-visão-geral-da-arquitetura)
@@ -773,9 +775,14 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 👥 Equipe
 
-- **FIAP - 11SOAT** - Turma de Pós-graduação
+- **FIAP - 11SOAT** - Turma de Pós-graduação em Software Architecture
+- **Responsáveis**: 
+  - Tito Parizotto (361184)
+  - Gustavo Silva (361477)
 - **Projeto**: Lanches Caieiras (LNCR)
+- **Fase**: 3 - Infraestrutura como Código e DevOps
 - **Arquitetura**: Cloud-native com Kubernetes
+- **Entregável**: Infraestrutura completa na AWS com Terraform
 
 ---
 
