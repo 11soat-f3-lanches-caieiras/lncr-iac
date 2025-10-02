@@ -27,7 +27,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
 
-  enable_cluster_creator_admin_permissions = true
+  enable_cluster_creator_admin_permissions = false
   name                                     = "${var.prefix_name}-${var.environment}-eks"
   kubernetes_version                       = var.cluster_version
   endpoint_public_access                   = var.cluster_endpoint_public_access

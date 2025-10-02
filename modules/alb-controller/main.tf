@@ -1,5 +1,7 @@
 resource "aws_iam_role" "load_balancer_controller_role" {
   name = "eks-load-balancer-controller-role"
+  
+  depends_on = [var.oidc_provider]
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -71,21 +73,18 @@ resource "helm_release" "aws_load_balancer_controller" {
     },
     {
       name  = "serviceAccount.create"
-      value = "true"
+      value = "false"
     },
     {
       name  = "serviceAccount.name"
       value = "aws-load-balancer-controller"
     },
     {
-      name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
-      value = aws_iam_role.load_balancer_controller_role.arn
-    },
-    {
       name  = "vpcId"
       value = var.vpc_id
     }
   ]
+  
   values = [
     <<-EOT
     tolerations:
@@ -94,16 +93,15 @@ resource "helm_release" "aws_load_balancer_controller" {
         effect: "NoSchedule"
     EOT
   ]
+  
+  depends_on = [kubectl_manifest.load_balancer_service_account]
 }
 
 resource "kubectl_manifest" "load_balancer_namespace" {
   yaml_body = data.template_file.load_balancer_namespace.rendered
 }
 
-
-
-resource "kubectl_manifest" "default_ingress" {
-  yaml_body  = data.template_file.default_ingress.rendered
-  depends_on = [helm_release.aws_load_balancer_controller]
+resource "kubectl_manifest" "load_balancer_service_account" {
+  yaml_body  = data.template_file.load_balancer_service_account.rendered
 }
 
