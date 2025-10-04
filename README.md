@@ -1,8 +1,8 @@
 [![Infra Base](https://github.com/11soat-f3-lanches-caieiras/lncr-iac/actions/workflows/infra-base.yml/badge.svg?branch=develop)](https://github.com/11soat-f3-lanches-caieiras/lncr-iac/actions/workflows/infra-base.yml)
 
-# 🏗️ LNCR Infrastructure as Code (IaC)
+# 🏗️ Lanches Caieiras Infrastructure as Code (IaC)
 
-Este repositório contém a infraestrutura completa como código para o projeto LNCR (Lanches Caieiras), implementando uma arquitetura moderna e escalável na AWS usando Terraform. A solução inclui VPC, EKS, OpenVPN, API Gateway, ECR, CodeBuild e outros serviços essenciais.
+Este repositório contém a infraestrutura completa como código para o projeto Lanches Caieiras (lncr), implementando uma arquitetura moderna e escalável na AWS usando Terraform. A solução inclui VPC, EKS, OpenVPN, API Gateway, ECR, CodeBuild e outros serviços essenciais.
 
 > **📚 Contexto Acadêmico**: Este repositório faz parte dos entregáveis do trabalho da **Fase 3** do curso de **Pós-graduação em Software Architecture** da **FIAP**, demonstrando a aplicação prática de conceitos de arquitetura de software, infraestrutura como código e DevOps em um ambiente cloud-native.
 
@@ -27,11 +27,11 @@ Este repositório contém a infraestrutura completa como código para o projeto 
 A infraestrutura foi projetada seguindo as melhores práticas de segurança e escalabilidade:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                           AWS Cloud                             │
-├─────────────────────────────────────────────────────────────────┤
+┌──────────────────────────────────────────────────────────────────┐
+│                           AWS Cloud                              │
+├──────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
-│  │   API Gateway   │────│            VPC Network              │ │
+│  │   API Gateway   │────│            VPC Network               │ │
 │  │   (HTTP v2)     │    │  ┌─────────────┐  ┌─────────────────┐│ │
 │  └─────────────────┘    │  │   Public    │  │    Private      ││ │
 │                         │  │   Subnets   │  │    Subnets      ││ │
@@ -47,9 +47,9 @@ A infraestrutura foi projetada seguindo as melhores práticas de segurança e es
 │                         └──────────────────────────────────────┘ │
 │  ┌─────────────────┐                                             │
 │  │   CodeBuild     │    ┌──────────────────────────────────────┐ │
-│  │   Projects      │    │        Secrets Manager              │ │
+│  │   Projects      │    │        Secrets Manager               │ │
 │  └─────────────────┘    └──────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🚀 Recursos Provisionados
