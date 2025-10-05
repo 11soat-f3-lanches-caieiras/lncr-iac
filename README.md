@@ -26,7 +26,8 @@ Este repositório contém a infraestrutura completa como código para o projeto 
 
 A infraestrutura foi projetada seguindo as melhores práticas de segurança e escalabilidade:
 
-[![Arquitetura LNCR](https://drive.google.com/uc?export=view&id=1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw)](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Diagrama%20de%20Infraestrutura.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw%26export%3Ddownload)
+[![Arquitetura LNCR](docs/Diagrama%20de%20Infraestrutura.drawio.png)](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Diagrama%20de%20Infraestrutura.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw%26export%3Ddownload)
+
 
 ## 🚀 Recursos Provisionados
 
