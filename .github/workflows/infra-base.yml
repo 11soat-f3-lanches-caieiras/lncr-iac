@@ -4,8 +4,8 @@ env:
   TERRAFORM_VERSION: 1.5.7
 
 on:
-  push:
-    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
     paths:
       - modules/ecr/**
       - modules/eks/**

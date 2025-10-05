@@ -26,31 +26,7 @@ Este repositório contém a infraestrutura completa como código para o projeto 
 
 A infraestrutura foi projetada seguindo as melhores práticas de segurança e escalabilidade:
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                           AWS Cloud                              │
-├──────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
-│  │   API Gateway   │────│            VPC Network               │ │
-│  │   (HTTP v2)     │    │  ┌─────────────┐  ┌─────────────────┐│ │
-│  └─────────────────┘    │  │   Public    │  │    Private      ││ │
-│                         │  │   Subnets   │  │    Subnets      ││ │
-│  ┌─────────────────┐    │  │             │  │                 ││ │
-│  │     Lambda      │    │  │  OpenVPN    │  │   EKS Cluster   ││ │
-│  │  (Authorizer)   │    │  │   Server    │  │   + Nodes       ││ │
-│  └─────────────────┘    │  └─────────────┘  └─────────────────┘│ │
-│                         │                                      │ │
-│  ┌─────────────────┐    │  ┌─────────────┐  ┌─────────────────┐│ │
-│  │      ECR        │    │  │    Data     │  │   FSx OpenZFS   ││ │
-│  │ (Repositories)  │    │  │   Subnets   │  │   (Storage)     ││ │
-│  └─────────────────┘    │  └─────────────┘  └─────────────────┘│ │
-│                         └──────────────────────────────────────┘ │
-│  ┌─────────────────┐                                             │
-│  │   CodeBuild     │    ┌──────────────────────────────────────┐ │
-│  │   Projects      │    │        Secrets Manager               │ │
-│  └─────────────────┘    └──────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
-```
+![Arquitetura LNCR](https://drive.google.com/uc?export=view&id=1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw)
 
 ## 🚀 Recursos Provisionados
 
