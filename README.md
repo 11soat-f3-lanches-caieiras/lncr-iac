@@ -26,7 +26,7 @@ Este repositório contém a infraestrutura completa como código para o projeto 
 
 A infraestrutura foi projetada seguindo as melhores práticas de segurança e escalabilidade:
 
-![Arquitetura LNCR](https://drive.google.com/uc?export=view&id=1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw)
+![Arquitetura LNCR](https://drive.google.com/thumbnail?id=1rKZRqcxGfWoqetAgKH6eO4vvN72eppjw&sz=w1000)
 
 ## 🚀 Recursos Provisionados
 
